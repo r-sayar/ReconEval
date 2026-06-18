@@ -1,0 +1,29 @@
+# configs/base_eval.yaml
+# @package _global_
+defaults:
+  - model: eval/scVI
+  - data: tahoe
+  - metric: coexpression
+  - _self_
+
+precision: high
+split: split01
+
+inference_kwargs:
+  n_samples: 1
+
+train_fraction: 0.1
+test_fraction: 1.0
+seed: 42
+
+dynamic_model_loading: true
+
+# deprecated
+model_data: ${data.name}
+
+
+eval_path: ${data.eval_path}
+split_key: ${data.split_key}
+
+output:
+  save_path: /lustre/groups/ml01/workspace/xiaotong.fu/reconstruction/results/${data.name}_data/${split}/sampled/${model.meta.name}/${model.load.model_name}/${metric.meta.name}/sampled_test-${test_fraction}_train-${train_fraction}_${seed}.csv

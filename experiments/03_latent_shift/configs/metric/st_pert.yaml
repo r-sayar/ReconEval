@@ -1,0 +1,32 @@
+meta:
+  name: st_pert
+
+evaluator:
+  _target_: sc_reconstruction.metrics.st_pert.STPerturbationEvaluator
+  _partial_: true
+  zarr_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/comb_w_obs.zarr
+  cytokine_csv_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/sup/cytokine_act_merged.csv
+  cell_cycle_genes_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/sup/regev_lab_cell_cycle_genes.txt
+  metric_projector_mean_path: /lustre/groups/ml01/workspace/xiaotong.fu/reconstruction/weights/pbmc/uni/PCA/uni/mean.zarr
+  metric_projector_pc_path: /lustre/groups/ml01/workspace/xiaotong.fu/reconstruction/weights/pbmc/uni/PCA/uni/pc_50.zarr
+  cellcycle_min_cells: 5
+  split_key:
+    - cell_type
+    - donor
+    - cytokine
+  min_cells: 30
+  max_cells: 1000
+  dice_k:
+    - 10
+    - 50
+    - 100
+  mmd_gamma: 0.01
+  overlap_threshold: 5
+  correlation_measures:
+    - pearson
+    - spearman
+  cytokine_min_genes: 5
+  cytokine_ctrl_size: 50
+  cytokine_n_bins: 25
+  max_workers: 10
+  batch_size: 20

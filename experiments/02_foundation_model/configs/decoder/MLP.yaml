@@ -1,0 +1,66 @@
+meta:
+  name: MLP
+
+model_args:
+  _target_: sc_reconstruction.decoders.reconmlp.ReconMLPDecoder
+  n_input: ${latent_dim}
+  n_output: ${gene_dim}
+  n_layers: 1
+  n_hidden: 4096
+  distribution: normal
+  library_size_mode: none
+  learning_rate: 0.0001
+  reduce_lr_on_plateau: True
+  lr_factor: 0.6
+  lr_patience: 5
+  lr_threshold: 5e-5
+  lr_min: 0.0
+
+load:
+  model_name: 500_6_4096_normal_none_20251117
+  path: /lustre/groups/ml01/workspace/xiaotong.fu/reconstruction/decoder/pbmc/ag/scGPT/split02/MLP/500_4_4096_normal_none_20251228/epoch=41-val/loss_epoch=0.0701.ckpt
+
+
+
+save:
+  dir: ${weights.dir}
+  filename: ${decoder.max_epochs}_${decoder.model_args.n_layers}_${decoder.model_args.n_hidden}_${decoder.model_args.distribution}_${decoder.model_args.library_size_mode}_${now:%Y%m%d}
+
+max_epochs: 500
+training:
+  callbacks:
+    - _target_: lightning.pytorch.callbacks.ModelCheckpoint
+      monitor: "val/loss_epoch"
+      filename: "{epoch:02d}-{val/loss_epoch:.4f}"
+      dirpath: ${decoder.save.dir}/${decoder.save.filename}
+      save_top_k: 1
+      mode: "min"
+      save_last: false
+      every_n_epochs: 1
+      verbose: true
+    - _target_: lightning.pytorch.callbacks.EarlyStopping
+      monitor: "val/loss_epoch"
+      min_delta: 5e-5
+      patience: 10
+      mode: "min"
+      verbose: true
+
+    - _target_: sc_reconstruction.dataloaders.datamodules.DatasetEpochCallback
+
+
+
+
+logging:
+  wandb:
+    _target_: lightning.pytorch.loggers.WandbLogger
+    project: sc_decode_${data.name}
+    name: ${split}_${decoder.meta.name}_${decoder.model_args.n_layers}_${decoder.model_args.n_hidden}_${decoder.model_args.distribution}_${decoder.model_args.library_size_mode}
+    save_dir: ${logging.dir}
+    group: ${latent_key}
+    config:
+      n_layers: ${decoder.model_args.n_layers}
+      n_hidden: ${decoder.model_args.n_hidden}
+      max_epochs: ${decoder.max_epochs}
+      library_size_mode: ${decoder.model_args.library_size_mode}
+      split: ${split}
+      latent_key: ${latent_key}

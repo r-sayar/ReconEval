@@ -1,0 +1,40 @@
+name: reconeval-pancellflow
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.12
+  - numpy=2.2.*
+  - pandas=2.3.*
+  - scipy=1.15.*
+  - scikit-learn=1.5.*
+  - matplotlib=3.10.*
+  - tqdm=4.67.*
+  - pyyaml=6.0.*
+  - anndata=0.12.*
+  - scanpy=1.11.*
+  - h5py=3.15.*
+  - zarr=3.1.*
+  - numcodecs=0.16.*
+  - pytorch=2.9.*
+  - lightning=2.6.*
+  - hydra-core=1.3.*
+  - omegaconf=2.3.*
+  - wandb=0.24.*
+  - pip
+  - pip:
+      # CellFlow training stack (JAX)
+      - jax==0.8.2
+      - jaxlib==0.8.2
+      - flax==0.12.2
+      - optax==0.2.6
+      - orbax==0.1.9
+      - equinox==0.13.2
+      - ott-jax==0.5.0
+      - cell-flow-perturbation==0.0.1
+      # STATE perturbation model (latent_shift task; uses state.tx, not state.emb)
+      - arc-state
+      - cell-load
+      - scvi-tools==1.4.2
+      - -e ..

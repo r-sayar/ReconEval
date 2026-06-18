@@ -1,0 +1,30 @@
+# configs/base_eval_st.yaml
+# @package _global_
+defaults:
+  - metric: st_pert
+  - _self_
+
+# Required override: path to an ST training run directory
+run_dir: ???
+
+split: test      # test | val
+ckpt: last       # last | final
+device: cuda
+
+train_fraction: 0.10  # fraction of train combos to include (matches biological.py default)
+test_fraction: 1.0    # fraction of test combos to sample (1.0 = all)
+seed: 42
+min_step: 0           # minimum training step for 'best' checkpoint selection (0 = no filter)
+no_ctrl: false        # set true to exclude PBS combinations
+
+# h5ad files containing per-cell embeddings (obsm) for each split
+h5ad_paths:
+  test: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_st/test/test.h5ad
+  val:  /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_st/val/val.h5ad
+
+# zarr storing which combinations belong to each split (keys: test_combinations, etc.)
+split_zarr_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/split03/split_metadata.zarr
+
+output:
+  results_root: /lustre/groups/ml01/workspace/xiaotong.fu/reconstruction/results/st
+  file_name: sampled_test-${test_fraction}_${seed}

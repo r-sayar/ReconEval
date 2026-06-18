@@ -1,0 +1,5 @@
+max_epochs: 100
+min_epochs: 10
+accelerator: auto
+devices: 1
+default_root_dir: ${model.save.dir}/${model.save.filename}

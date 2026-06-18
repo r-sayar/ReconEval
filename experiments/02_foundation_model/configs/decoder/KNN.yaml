@@ -1,0 +1,15 @@
+meta:
+  name: KNN
+
+model_args:
+  _target_: sc_reconstruction.decoders.reconknn.ReconKNNDecoder
+  all_genes_zarr_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_w_ag/comb_w_obs.zarr
+  target_genes_zarr_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/comb_w_obs.zarr
+  train_zarr_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_scConcept/ag/split01/train.zarr
+  n_neighbors: 10
+  chunk_size: 100000
+  latent_name: scConcept
+
+load:
+  model_name: KNN_10
+  path: empty_path

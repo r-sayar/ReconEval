@@ -1,0 +1,37 @@
+# configs/base_eval.yaml
+# @package _global_
+defaults:
+  - pretrained: scGPT
+  - decoder: MLP
+  - data: pbmc_w_ag
+  - metric: coexpression
+  - _self_
+
+precision: high
+split: split01
+emb_zarr_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_${pretrained.meta.name}/${pretrained.meta.name}_emb.zarr
+inference_kwargs:
+  n_samples: 1
+
+latent_key: ${pretrained.meta.name}
+latent_dim: ${pretrained.meta.latent_dim}
+gene_space: ag
+gene_dim: 40352
+
+var_names_path: null 
+target_var_names_path: null 
+train_fraction: 0.1
+test_fraction: 1.0
+seed: 42
+
+dynamic_model_loading: true
+
+# deprecated
+model_data: ${data.name}
+
+
+eval_path: ${data.eval_path}
+split_key: ${data.split_key}
+
+output:
+  save_path: /lustre/groups/ml01/workspace/xiaotong.fu/reconstruction/results/${data.name}_decode/${gene_space}/${split}/${pretrained.meta.name}/${decoder.meta.name}/${decoder.load.model_name}/${metric.meta.name}/sampled_test-${test_fraction}_train-${train_fraction}_${seed}.csv

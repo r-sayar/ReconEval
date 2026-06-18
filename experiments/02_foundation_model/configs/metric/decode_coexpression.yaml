@@ -1,0 +1,23 @@
+meta:
+  name: coexpression
+
+evaluator:
+  _target_: sc_reconstruction.metrics.coexpression.CoexpressionBatchEvaluator
+  _partial_: true
+  zarr_path: ${eval_path}
+  reference_batch: Krasnow_2020
+  input_key: scANVI
+  output_key: X
+  split_key:
+    - cell_type
+    - dataset
+    - None
+  overlap_threshold: 5
+  min_cells: 20
+  threshold: 0.0
+  correlation_measure:
+    - pearson
+    - spearman
+  max_cells: 1e4
+  batch_size: 100
+  max_workers: 20

@@ -1,0 +1,199 @@
+Running Sphinx v9.1.0
+loading translations [en]... done
+making output directory... done
+loading intersphinx inventory 'numpy' from https://numpy.org/doc/stable/objects.inv ...
+loading intersphinx inventory 'python' from https://docs.python.org/3/objects.inv ...
+loading intersphinx inventory 'pandas' from https://pandas.pydata.org/docs/objects.inv ...
+checking bibtex cache... out of date
+parsing bibtex file /ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/docs/references.bib... parsed 12 entries
+myst v5.1.0: MdParserConfig(commonmark_only=False, gfm_only=False, enable_extensions={'colon_fence', 'amsmath', 'deflist', 'dollarmath'}, disable_syntax=[], all_links_external=False, links_external_new_tab=False, url_schemes=('http', 'https', 'mailto', 'ftp'), ref_domains=None, fence_as_directive=set(), number_code_blocks=[], title_to_header=False, heading_anchors=3, heading_slug_func=None, html_meta={}, footnote_sort=True, footnote_transition=True, words_per_minute=200, substitutions={}, linkify_fuzzy_links=True, dmath_allow_labels=True, dmath_allow_space=True, dmath_allow_digits=True, dmath_double_inline=False, update_mathjax=True, mathjax_classes='tex2jax_process|mathjax_process|math|output_area', enable_checkboxes=False, strikethrough_single_tilde=False, colon_fence_exact_match=False, suppress_warnings=[], highlight_code_blocks=True)
+myst-nb v1.4.0: NbParserConfig(custom_formats={}, metadata_key='mystnb', cell_metadata_key='mystnb', kernel_rgx_aliases={}, eval_name_regex='^[a-zA-Z_][a-zA-Z0-9_]*$', execution_mode='off', execution_cache_path='', execution_excludepatterns=(), execution_timeout=30, execution_in_temp=False, execution_allow_errors=False, execution_raise_on_error=False, execution_show_tb=False, merge_streams=False, render_plugin='default', remove_code_source=False, remove_code_outputs=False, scroll_outputs=False, code_prompt_show='Show code cell {type}', code_prompt_hide='Hide code cell {type}', number_source_lines=False, output_stderr='show', render_text_lexer='myst-ansi', render_error_lexer='ipythontb', render_image_options={}, render_figure_options={}, render_markdown_format='commonmark', output_folder='build', append_css=True, metadata_to_fm=False)
+Using jupyter-cache at: /ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/docs/_build/.jupyter_cache
+building [mo]: targets for 0 po files that are out of date
+writing output... 
+building [html]: targets for 66 source files that are out of date
+updating environment: [new config] 66 added, 0 changed, 0 removed
+reading sources... [  2%] api/_autosummary/sc_reconstruction.adapters.FrozenMLPDecoderAdapter
+reading sources... [  3%] api/_autosummary/sc_reconstruction.dataloaders.DaskPCADataModule
+reading sources... [  5%] api/_autosummary/sc_reconstruction.dataloaders.DatasetEpochCallback
+reading sources... [  6%] api/_autosummary/sc_reconstruction.dataloaders.IterDaskDataModule
+reading sources... [  8%] api/_autosummary/sc_reconstruction.decoders.BaseReconstructionDecoder
+reading sources... [  9%] api/_autosummary/sc_reconstruction.decoders.ReconMLPDecoder
+reading sources... [ 11%] api/_autosummary/sc_reconstruction.decoders.ReconTransformerDecoder
+reading sources... [ 12%] api/_autosummary/sc_reconstruction.metrics.HIGHER_IS_BETTER
+reading sources... [ 14%] api/_autosummary/sc_reconstruction.metrics.aggregate_rank_percentile
+reading sources... [ 15%] api/_autosummary/sc_reconstruction.metrics.compute_all_metrics
+reading sources... [ 17%] api/_autosummary/sc_reconstruction.metrics.compute_biological_metrics
+reading sources... [ 18%] api/_autosummary/sc_reconstruction.metrics.compute_perturbational_metrics
+reading sources... [ 20%] api/_autosummary/sc_reconstruction.metrics.compute_statistical_metrics
+reading sources... [ 21%] api/_autosummary/sc_reconstruction.metrics.funky_heatmap
+reading sources... [ 23%] api/_autosummary/sc_reconstruction.metrics.load_cell_cycle_genes
+reading sources... [ 24%] api/_autosummary/sc_reconstruction.metrics.load_cytokine_dict_from_csv
+reading sources... [ 26%] api/_autosummary/sc_reconstruction.metrics.load_progeny
+reading sources... [ 27%] api/_autosummary/sc_reconstruction.metrics.metric_cellcycle
+reading sources... [ 29%] api/_autosummary/sc_reconstruction.metrics.metric_coexpression
+reading sources... [ 30%] api/_autosummary/sc_reconstruction.metrics.metric_cytokine
+reading sources... [ 32%] api/_autosummary/sc_reconstruction.metrics.metric_deg
+reading sources... [ 33%] api/_autosummary/sc_reconstruction.metrics.metric_energy_distance
+reading sources... [ 35%] api/_autosummary/sc_reconstruction.metrics.metric_knn_purity
+reading sources... [ 36%] api/_autosummary/sc_reconstruction.metrics.metric_mse
+reading sources... [ 38%] api/_autosummary/sc_reconstruction.metrics.metric_pathway
+reading sources... [ 39%] api/_autosummary/sc_reconstruction.metrics.metric_r2
+reading sources... [ 41%] api/_autosummary/sc_reconstruction.models.BaseReconstructionModel
+[sc_reconstruction.models] ReconNLSCVI unavailable: TypeError: __type_params__ must be set to a tuple
+reading sources... [ 42%] api/_autosummary/sc_reconstruction.models.ReconAE
+reading sources... [ 44%] api/_autosummary/sc_reconstruction.models.ReconKNN
+reading sources... [ 45%] api/_autosummary/sc_reconstruction.models.ReconMLSCVI
+reading sources... [ 47%] api/_autosummary/sc_reconstruction.models.ReconNLSCVI
+reading sources... [ 48%] api/_autosummary/sc_reconstruction.models.ReconPCA
+reading sources... [ 50%] api/_autosummary/sc_reconstruction.models.ReconPretrainedStateModel
+reading sources... [ 52%] api/_autosummary/sc_reconstruction.models.ReconPretrainedscConcept
+reading sources... [ 53%] api/_autosummary/sc_reconstruction.models.ReconPretrainedscGPT
+reading sources... [ 55%] api/_autosummary/sc_reconstruction.models.ReconPretrainedscimilarity
+reading sources... [ 56%] api/_autosummary/sc_reconstruction.models.ReconSCVI
+reading sources... [ 58%] api/_autosummary/sc_reconstruction.utils.create_model_from_cfg
+reading sources... [ 59%] api/_autosummary/sc_reconstruction.utils.filter_genes
+reading sources... [ 61%] api/_autosummary/sc_reconstruction.utils.find_model_paths
+reading sources... [ 62%] api/_autosummary/sc_reconstruction.utils.get_model_class_from_name
+reading sources... [ 64%] api/_autosummary/sc_reconstruction.utils.get_zarr_attr
+reading sources... [ 65%] api/_autosummary/sc_reconstruction.utils.inst_model_from_checkpoint
+reading sources... [ 67%] api/_autosummary/sc_reconstruction.utils.parse_model_params_from_filename
+reading sources... [ 68%] api/_autosummary/sc_reconstruction.utils.read_csv_pandas_flexible
+reading sources... [ 70%] api/_autosummary/sc_reconstruction.utils.sample_list
+reading sources... [ 71%] api/_autosummary/sc_reconstruction.utils.split_zarr_dataloader
+reading sources... [ 73%] api/_autosummary/sc_reconstruction.utils.transform_to_csr
+reading sources... [ 74%] api/adapters
+reading sources... [ 76%] api/dataloaders
+reading sources... [ 77%] api/decoders
+reading sources... [ 79%] api/index
+reading sources... [ 80%] api/metrics
+reading sources... [ 82%] api/models
+reading sources... [ 83%] api/utils
+reading sources... [ 85%] experiments
+reading sources... [ 86%] index
+reading sources... [ 88%] installation
+reading sources... [ 89%] overview
+reading sources... [ 91%] references
+reading sources... [ 92%] reproducibility
+reading sources... [ 94%] tutorials/end_to_end
+reading sources... [ 95%] tutorials/fm
+reading sources... [ 97%] tutorials/index
+reading sources... [ 98%] tutorials/latent_shift
+reading sources... [100%] tutorials/metrics
+
+/ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/src/sc_reconstruction/metrics/__init__.py:docstring of sc_reconstruction.metrics.HIGHER_IS_BETTER:3: ERROR: Unexpected indentation. [docutils]
+/ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/src/sc_reconstruction/metrics/__init__.py:docstring of sc_reconstruction.metrics.HIGHER_IS_BETTER:4: WARNING: Block quote ends without a blank line; unexpected unindent. [docutils]
+/ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/src/sc_reconstruction/metrics/__init__.py:docstring of sc_reconstruction.metrics.HIGHER_IS_BETTER:7: ERROR: Unexpected indentation. [docutils]
+/ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/src/sc_reconstruction/metrics/__init__.py:docstring of sc_reconstruction.metrics.HIGHER_IS_BETTER:8: WARNING: Inline strong start-string without end-string. [docutils]
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency... done
+preparing documents... done
+copying assets... 
+copying static files... 
+Writing evaluated template result to /ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/docs/_build/final/_static/basic.css
+Writing evaluated template result to /ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/docs/_build/final/_static/language_data.js
+Writing evaluated template result to /ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/docs/_build/final/_static/documentation_options.js
+Writing evaluated template result to /ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/docs/_build/final/_static/copybutton.js
+copying static files: done
+copying extra files... 
+copying extra files: done
+copying assets: done
+writing output... [  2%] api/_autosummary/sc_reconstruction.adapters.FrozenMLPDecoderAdapter
+writing output... [  3%] api/_autosummary/sc_reconstruction.dataloaders.DaskPCADataModule
+writing output... [  5%] api/_autosummary/sc_reconstruction.dataloaders.DatasetEpochCallback
+writing output... [  6%] api/_autosummary/sc_reconstruction.dataloaders.IterDaskDataModule
+writing output... [  8%] api/_autosummary/sc_reconstruction.decoders.BaseReconstructionDecoder
+writing output... [  9%] api/_autosummary/sc_reconstruction.decoders.ReconMLPDecoder
+writing output... [ 11%] api/_autosummary/sc_reconstruction.decoders.ReconTransformerDecoder
+writing output... [ 12%] api/_autosummary/sc_reconstruction.metrics.HIGHER_IS_BETTER
+writing output... [ 14%] api/_autosummary/sc_reconstruction.metrics.aggregate_rank_percentile
+writing output... [ 15%] api/_autosummary/sc_reconstruction.metrics.compute_all_metrics
+writing output... [ 17%] api/_autosummary/sc_reconstruction.metrics.compute_biological_metrics
+writing output... [ 18%] api/_autosummary/sc_reconstruction.metrics.compute_perturbational_metrics
+writing output... [ 20%] api/_autosummary/sc_reconstruction.metrics.compute_statistical_metrics
+writing output... [ 21%] api/_autosummary/sc_reconstruction.metrics.funky_heatmap
+writing output... [ 23%] api/_autosummary/sc_reconstruction.metrics.load_cell_cycle_genes
+writing output... [ 24%] api/_autosummary/sc_reconstruction.metrics.load_cytokine_dict_from_csv
+writing output... [ 26%] api/_autosummary/sc_reconstruction.metrics.load_progeny
+writing output... [ 27%] api/_autosummary/sc_reconstruction.metrics.metric_cellcycle
+writing output... [ 29%] api/_autosummary/sc_reconstruction.metrics.metric_coexpression
+writing output... [ 30%] api/_autosummary/sc_reconstruction.metrics.metric_cytokine
+writing output... [ 32%] api/_autosummary/sc_reconstruction.metrics.metric_deg
+writing output... [ 33%] api/_autosummary/sc_reconstruction.metrics.metric_energy_distance
+writing output... [ 35%] api/_autosummary/sc_reconstruction.metrics.metric_knn_purity
+writing output... [ 36%] api/_autosummary/sc_reconstruction.metrics.metric_mse
+writing output... [ 38%] api/_autosummary/sc_reconstruction.metrics.metric_pathway
+writing output... [ 39%] api/_autosummary/sc_reconstruction.metrics.metric_r2
+writing output... [ 41%] api/_autosummary/sc_reconstruction.models.BaseReconstructionModel
+writing output... [ 42%] api/_autosummary/sc_reconstruction.models.ReconAE
+writing output... [ 44%] api/_autosummary/sc_reconstruction.models.ReconKNN
+writing output... [ 45%] api/_autosummary/sc_reconstruction.models.ReconMLSCVI
+writing output... [ 47%] api/_autosummary/sc_reconstruction.models.ReconNLSCVI
+writing output... [ 48%] api/_autosummary/sc_reconstruction.models.ReconPCA
+writing output... [ 50%] api/_autosummary/sc_reconstruction.models.ReconPretrainedStateModel
+writing output... [ 52%] api/_autosummary/sc_reconstruction.models.ReconPretrainedscConcept
+writing output... [ 53%] api/_autosummary/sc_reconstruction.models.ReconPretrainedscGPT
+writing output... [ 55%] api/_autosummary/sc_reconstruction.models.ReconPretrainedscimilarity
+writing output... [ 56%] api/_autosummary/sc_reconstruction.models.ReconSCVI
+writing output... [ 58%] api/_autosummary/sc_reconstruction.utils.create_model_from_cfg
+writing output... [ 59%] api/_autosummary/sc_reconstruction.utils.filter_genes
+writing output... [ 61%] api/_autosummary/sc_reconstruction.utils.find_model_paths
+writing output... [ 62%] api/_autosummary/sc_reconstruction.utils.get_model_class_from_name
+writing output... [ 64%] api/_autosummary/sc_reconstruction.utils.get_zarr_attr
+writing output... [ 65%] api/_autosummary/sc_reconstruction.utils.inst_model_from_checkpoint
+writing output... [ 67%] api/_autosummary/sc_reconstruction.utils.parse_model_params_from_filename
+writing output... [ 68%] api/_autosummary/sc_reconstruction.utils.read_csv_pandas_flexible
+writing output... [ 70%] api/_autosummary/sc_reconstruction.utils.sample_list
+writing output... [ 71%] api/_autosummary/sc_reconstruction.utils.split_zarr_dataloader
+writing output... [ 73%] api/_autosummary/sc_reconstruction.utils.transform_to_csr
+writing output... [ 74%] api/adapters
+writing output... [ 76%] api/dataloaders
+writing output... [ 77%] api/decoders
+writing output... [ 79%] api/index
+writing output... [ 80%] api/metrics
+writing output... [ 82%] api/models
+writing output... [ 83%] api/utils
+writing output... [ 85%] experiments
+writing output... [ 86%] index
+writing output... [ 88%] installation
+writing output... [ 89%] overview
+writing output... [ 91%] references
+writing output... [ 92%] reproducibility
+writing output... [ 94%] tutorials/end_to_end
+writing output... [ 95%] tutorials/fm
+writing output... [ 97%] tutorials/index
+writing output... [ 98%] tutorials/latent_shift
+writing output... [100%] tutorials/metrics
+
+/ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/docs/tutorials/end_to_end.ipynb:10014: WARNING: Unknown source document '/ictstr01/groups/ml01/workspace/xiaotong.fu/public/reconstruction/tutorials/metrics' [myst.xref_missing]
+generating indices... genindex py-modindex done
+highlighting module code... [  5%] sc_reconstruction.adapters.state_decoder_adapter
+highlighting module code... [ 10%] sc_reconstruction.dataloaders.datamodules
+highlighting module code... [ 15%] sc_reconstruction.decoders._base_decoder
+highlighting module code... [ 20%] sc_reconstruction.decoders.reconmlp
+highlighting module code... [ 25%] sc_reconstruction.decoders.recontransformer
+highlighting module code... [ 30%] sc_reconstruction.metrics.api
+highlighting module code... [ 35%] sc_reconstruction.metrics.plotting
+highlighting module code... [ 40%] sc_reconstruction.models._base_model
+highlighting module code... [ 45%] sc_reconstruction.models.reconae
+highlighting module code... [ 50%] sc_reconstruction.models.reconknn
+highlighting module code... [ 55%] sc_reconstruction.models.reconmlscvi
+highlighting module code... [ 60%] sc_reconstruction.models.reconpca
+highlighting module code... [ 65%] sc_reconstruction.models.reconscconcept
+highlighting module code... [ 70%] sc_reconstruction.models.reconscgpt
+highlighting module code... [ 75%] sc_reconstruction.models.reconscimilarity
+highlighting module code... [ 80%] sc_reconstruction.models.reconscvi
+highlighting module code... [ 85%] sc_reconstruction.models.reconse
+highlighting module code... [ 90%] sc_reconstruction.utils.data_tools
+highlighting module code... [ 95%] sc_reconstruction.utils.model_loader
+highlighting module code... [100%] sc_reconstruction.utils.run_tools
+
+writing additional pages... search done
+copying images... [100%] _build/jupyter_execute/f4d04293b1b33014a9de5d4aaeea8f395b27f991cdf75fb48afd7ca6e1b5c274.png
+
+dumping search index in English (code: en)... done
+dumping object inventory... done
+build succeeded, 5 warnings.
+
+The HTML pages are in docs/_build/final.

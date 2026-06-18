@@ -1,0 +1,21 @@
+# @package _global_
+# configs/base.yaml
+defaults:
+  - model: train/scVI
+  - data: tahoe
+  - trainer: scVI
+  - _self_
+
+precision: high
+split: split03
+job_name: "train"
+seed: 42
+
+weights:
+  dir: ${oc.env:RECONEVAL_OUT,${oc.env:HOME}/reconeval_outputs}/weights/${data.name}/${split}/${model.meta.name}/${model.meta.note}
+
+logging:
+  dir: "${oc.env:RECONEVAL_OUT,${oc.env:HOME}/reconeval_outputs}/logs/"
+hydra:
+  run:
+    dir: "${oc.env:RECONEVAL_OUT,${oc.env:HOME}/reconeval_outputs}/outputs/${data.name}/${model.meta.name}/${now:%Y-%m-%d_%H-%M}"

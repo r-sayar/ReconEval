@@ -1,0 +1,68 @@
+# CellFlow training config — replicates the official PBMC tutorial architecture
+# (docs/notebooks/100_pbmc.ipynb) exactly.
+#
+# Pass via: python train_cf.py --model SE --config default
+
+# ── solver ───────────────────────────────────────────────────────────────────
+solver: otfm          # otfm | genot
+
+# ── training ─────────────────────────────────────────────────────────────────
+num_iterations: 500000
+batch_size: 1024
+valid_freq: 20000
+seed: 42
+
+# ── validation subsampling ────────────────────────────────────────────────────
+# Max cells per (donor, target_gene) group kept for validation inference.
+# 100 cells/condition: ~90 conditions × 12 donors × 100 cells = ~108K ODE solves
+# per validation step. Matches train_st.py's limit_val_batches=100 spirit.
+# Increase to 500 for final evaluation quality; 100 is sufficient for monitoring.
+valid_n_per_condition: 100
+
+# ── optimizer ────────────────────────────────────────────────────────────────
+lr: 5.0e-5
+multistep_every_k: 20   # optax.MultiSteps gradient accumulation steps
+
+# ── OT matching ───────────────────────────────────────────────────────────────
+match_epsilon: 0.5    # entropic regularisation for Sinkhorn OT coupling
+match_tau_a: 1.0      # unbalancedness (source); 1.0 = balanced
+match_tau_b: 1.0      # unbalancedness (target); 1.0 = balanced
+
+# ── probability path ─────────────────────────────────────────────────────────
+# constant_noise: 0.5 matches the tutorial; magnitude should scale with the
+# support/variance of the cell embedding. Use 0.0 for no augmentation.
+constant_noise: 0.5
+
+# ── condition encoder architecture ───────────────────────────────────────────
+condition_mode: deterministic   # deterministic | stochastic
+regularization: 0.0
+condition_embedding_dim: 256
+cond_output_dropout: 0.9
+pooling: attention_token        # mean | attention_token | attention_seed
+
+# pool_sample_covariates: True means donor embedding is concatenated before
+# the attention pooling (part of self-attention), matching the tutorial.
+pool_sample_covariates: true
+
+# layers processing each covariate *before* pooling
+# keys must match perturbation_covariates / sample_covariates keys in prepare_data
+layers_before_pool:
+  cytokine_treatment:
+    layer_type: mlp
+    dims: [1024, 1024]
+    dropout_rate: 0.5
+  donor:
+    layer_type: mlp
+    dims: [256, 256]
+    dropout_rate: 0.0
+
+# single MLP block applied to the pooled condition embedding
+layers_after_pool:
+  layer_type: mlp
+  dims: [1024, 1024]
+  dropout_rate: 0.0
+
+# ── velocity-field architecture ───────────────────────────────────────────────
+time_encoder_dims: [1024, 1024, 1024]   # tutorial value
+hidden_dims: [2048, 2048, 2048]         # tutorial value; scales with embedding dim
+decoder_dims: [4096, 4096, 4096]        # tutorial value

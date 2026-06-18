@@ -1,0 +1,22 @@
+version: 2
+
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.11"
+  # Force single-process sphinx-build. RTD's default invokes `sphinx-build
+  # -j auto`; the parallel worker dies fatally when autodoc hits a mocked
+  # metaclass base (TypeError that one of the workers can't recover from).
+  # Serial builds degrade those to suppressed warnings — see suppress_warnings
+  # + autodoc_skip_member in docs/conf.py.
+  commands:
+    - pip install --upgrade pip
+    - pip install -e .[docs]
+    - python -m sphinx -T -b html -d docs/_build/doctrees -D language=en docs $READTHEDOCS_OUTPUT/html
+
+python:
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs

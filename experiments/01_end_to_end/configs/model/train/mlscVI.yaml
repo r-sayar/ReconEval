@@ -1,0 +1,39 @@
+# Training configuration for scVI model
+meta:
+  name: mlscVI
+  note: Default
+
+model_args:
+  _target_: sc_reconstruction.models.reconmlscvi.ReconMLSCVI 
+  gene_likelihood: normal
+  n_hidden: 1024
+  n_latent: 300
+  n_layers: 3
+  use_observed_lib_size: false
+
+dm_args: ${data.model_specific.${model.meta.name}}
+
+save:
+  dir: ${weights.dir}
+  filename: ${trainer.max_epochs}_${model.model_args.n_hidden}_${model.model_args.n_latent}_${model.model_args.n_layers}_${model.training.plan_kwargs.max_kl_weight}_${now:%Y%m%d}
+
+training:
+  plan_kwargs:
+    max_kl_weight: 0.1
+    min_kl_weight: 0
+    n_epochs_kl_warmup: null
+    n_steps_kl_warmup: 40000
+    lr: 1e-4
+    reduce_lr_on_plateau: true
+    lr_threshold: 50
+    lr_patience: 3
+  callbacks:
+    - _target_: sc_reconstruction.dataloaders.datamodules.DatasetEpochCallback
+
+logging:
+  wandb:
+    _target_: lightning.pytorch.loggers.WandbLogger
+    project: sc_recon_${data.name}
+    group: ${model.meta.name}
+    name: ${data.name}_${split}_${model.meta.name}_${model.model_args.n_hidden}_${model.model_args.n_latent}_${model.model_args.n_layers}_${now:%Y%m%d}
+    save_dir: ${logging.dir}

@@ -1,0 +1,3 @@
+# runs/configs/trainer/PCA.yaml
+save_mean: true
+save_path: ${model.save.dir}/${model.save.filename}

@@ -1,0 +1,20 @@
+meta:
+  name: scimilarity
+  latent_dim: 128
+
+model_args:
+  _target_: sc_reconstruction.models.reconscimilarity.ReconPretrainedscimilarity 
+  checkpoint_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/sup/scimilarity/model_v1.1
+
+data_args:
+  split_meta_root: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_w_ag/comb_w_obs.zarr"
+  comb_meta_root: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_w_ag/comb_w_obs.zarr"
+  target_key: "combinations"
+  output_dir: "${oc.env:RECONEVAL_OUT,${oc.env:HOME}/reconeval_outputs}/scimilarity_emb.zarr"
+  var_names_path: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_w_ag/comb_w_obs.zarr"
+  var_names_key: "var_names"
+
+
+parts: 1
+total_parts: 15
+ 

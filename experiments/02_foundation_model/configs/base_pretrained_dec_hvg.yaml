@@ -1,0 +1,54 @@
+# configs/base_eval.yaml
+# @package _global_
+defaults:
+  - model: eval/AE # not used for pretrain FMs
+  - pretrained: scConcept
+  - decoder: MLP
+  - data: pbmc
+  - _self_
+
+hvg:
+  all_genes_zarr: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_w_ag/comb_w_obs.zarr
+  target_genes_zarr: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/comb_w_obs.zarr
+
+precision: high
+split: split02
+gene_space: hvg
+gene_dim: 5412
+latent_key: ${pretrained.meta.name}
+latent_dim: ${pretrained.meta.latent_dim}
+inference_kwargs:
+  n_samples: 1
+
+seed: 42
+
+dynamic_model_loading: true
+
+# Always use all genes for FMs embedding
+embdata_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/${data.name}_${pretrained.meta.name}/ag/${split}
+data_args:
+  _target_: sc_reconstruction.dataloaders.datamodules.SubsetDaskDecodeOnlyDataModule
+  train_path: ${embdata_path}/train.zarr
+  val_path: ${embdata_path}/val.zarr
+  expression_key: "X"
+  latent_key: ${latent_key}
+  chunk_size: 5_000
+  chunks_per_worker: 5
+  minibatch_size: 256
+  num_workers: 16
+
+# data_args:
+#   _target_: sc_reconstruction.dataloaders.datamodules.DecodeOnlyDataModule
+#   train_path: ${embdata_path}/train.zarr
+#   val_path: ${embdata_path}/val.zarr
+#   expression_key: "X"
+#   latent_key: ${latent_key}
+#   minibatch_size: 5_000
+#   num_workers: 16
+
+
+weights:
+  dir: ${oc.env:RECONEVAL_OUT,${oc.env:HOME}/reconeval_outputs}/decoder/${data.name}/${gene_space}/${latent_key}/${split}/${decoder.meta.name}
+
+logging:
+  dir: ${oc.env:RECONEVAL_OUT,${oc.env:HOME}/reconeval_outputs}/logs/

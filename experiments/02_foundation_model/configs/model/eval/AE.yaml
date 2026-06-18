@@ -1,0 +1,10 @@
+meta:
+  name: AE       
+
+
+load:
+  path: "/lustre/groups/ml01/workspace/xiaotong.fu/reconstruction/reconstruction/weights/tahoe/AE/split02/Default/200_[2048]_400_20250605/epoch=35-val/loss_epoch=0.0050.ckpt"
+  model_name: "200_[2048]_400_20250602"
+  additional_params:
+    distribution: normal
+    input_dim: ${data.input_dim}

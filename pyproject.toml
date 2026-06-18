@@ -1,0 +1,73 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatch-vcs", "hatchling"]
+
+[project]
+name = "reconeval"
+description = "Benchmark for gene-expression reconstruction from single-cell latent representations"
+readme = "README.rst"
+license = {file = "LICENSE"}
+authors = [{name = "Theis Lab"}]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "anndata",
+    "numpy",
+    "pandas",
+    "scipy",
+    "scikit-learn",
+    "scanpy",
+    "matplotlib",
+    "tqdm",
+    "decoupler",
+    "omnipath",
+    "pot",
+    "zarr",
+    "numcodecs",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+docs = [
+    "sphinx>=7",
+    "pydata-sphinx-theme>=0.15",
+    "myst-nb>=1.1",
+    "sphinx-design",
+    "sphinx-copybutton",
+    "sphinx-autodoc-typehints",
+    "sphinxcontrib-bibtex>=2",
+    "sphinxext-opengraph",
+    "ipykernel",
+    "ipython",
+]
+dev = [
+    "pytest",
+    "pre-commit",
+]
+
+[project.urls]
+Homepage = "https://github.com/theislab/ReconEval"
+Documentation = "https://reconeval.readthedocs.io"
+Source = "https://github.com/theislab/ReconEval"
+Issues = "https://github.com/theislab/ReconEval/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sc_reconstruction"]
+
+# Hatchling needs an explicit mapping for the src-layout so the wheel
+# contains `sc_reconstruction/...` and `pip install [-e] .` resolves
+# imports correctly.
+[tool.hatch.build.targets.wheel.force-include]
+"src/sc_reconstruction" = "sc_reconstruction"
+
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.1.0"

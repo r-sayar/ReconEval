@@ -1,0 +1,9 @@
+[datasets]
+pbmc = "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_st/val/"
+
+[training]
+pbmc = "train"
+
+[zeroshot]
+
+[fewshot]

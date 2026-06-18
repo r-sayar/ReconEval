@@ -1,0 +1,68 @@
+# Arch: arcinstitute/ST-SE-Parse (HuggingFace pretrained checkpoint)
+# Reference row: "HF pretrained" column from comparison table
+
+# ── top-level model params ────────────────────────────────────────────────────
+output_space: gene             # no final_down_then_up; residual in hidden space
+batch_encoder: false           # HF does NOT use batch encoder
+bidirectional_attention: true
+blur: 0.05
+cell_set_len: 512
+confidence_token: false
+distributional_loss: energy
+finetune_vci_decoder: false
+freeze_pert_backbone: false
+hidden_dim: 384
+init_from: null
+loss: energy
+mask_attn: false
+n_decoder_layers: 1            # single Linear f_recon: h(384) -> E
+n_encoder_layers: 1            # single Linear f_cell / f_pert
+nb_decoder: false
+predict_residual: true
+regularization: 0.0
+residual_decoder: false
+softplus: true                 # HF uses softplus activation
+transformer_backbone_key: llama
+use_basal_projection: false    # not in HF config
+use_batch_token: false
+
+# ── LoRA config (disabled in HF pretrained) ───────────────────────────────────
+lora:
+  enable: false
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  bias: none
+  target: auto
+  adapt_mlp: false
+  task_type: FEATURE_EXTRACTION
+  merge_on_eval: false
+
+# ── transformer backbone (LLaMA) kwargs ──────────────────────────────────────
+transformer_backbone_kwargs:
+  attention_dropout: 0.0
+  bidirectional_attention: true
+  bos_token_id: 1
+  eos_token_id: 2
+  pad_token_id: 0
+  head_dim: 64                 # q_proj out = 12 heads * 64 = 768
+  hidden_dropout: 0.0
+  hidden_size: 384
+  intermediate_size: 3072      # 8 x hidden_size
+  layer_norm_eps: 1.0e-6
+  max_position_embeddings: 512
+  mmd_num_chunks: 1
+  num_attention_heads: 12
+  num_hidden_layers: 8
+  num_key_value_heads: 12
+  randomize_mmd_chunks: false
+  rotary_dim: 0
+  softplus: true
+  tie_word_embeddings: false
+  transformer_decoder: false
+  use_cache: false
+  use_effect_gating_token: false
+  use_rotary_embeddings: false
+
+# fresh decoder dims (frozen mode ignores this — replaced by inject_frozen_decoder)
+decoder_hidden_dims: [1024, 1024, 512]

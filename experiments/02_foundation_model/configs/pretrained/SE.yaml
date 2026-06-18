@@ -1,0 +1,23 @@
+meta:
+  name: SE
+  latent_dim: 2058
+  
+model_args:
+  _target_: sc_reconstruction.models.reconse.ReconPretrainedStateModel
+  checkpoint_path: '/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/sup/SE-600M/se600m_epoch16.ckpt'
+  protein_embeds_path: '/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/sup/SE-600M/protein_embeddings.pt'
+  emb_key: 'X_state'
+  read_depth: 3
+  encode_batch_size: 256
+  decode_batch_size: 32
+
+data_args:
+  split_meta_root: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/split02/split_metadata.zarr"
+  comb_meta_root: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/comb_w_obs.zarr"
+  target_key: "val_combinations"
+  output_dir: "${oc.env:RECONEVAL_OUT,${oc.env:HOME}/reconeval_outputs}/SE_emb.zarr"
+
+
+parts: 1
+total_parts: 15
+ 

@@ -1,0 +1,23 @@
+# configs/model/PCA.yaml
+
+meta:
+  name: PCA       
+  note: Default
+
+model_args:
+  _target_: sc_reconstruction.models.reconpca.ReconPCA 
+  n_components: 300
+
+
+dm_args: ${data.model_specific.${model.meta.name}}
+
+save:
+  dir: ${weights.dir}
+  filename: ''
+
+training: None
+
+
+
+# optional
+# logging:

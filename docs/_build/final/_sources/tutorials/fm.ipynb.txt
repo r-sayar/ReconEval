@@ -1,0 +1,243 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "intro-md",
+   "metadata": {},
+   "source": "# Foundation-model reconstruction\n\nEmbed cells with a frozen pretrained FM, train a lightweight MLP decoder\non top, score the reconstruction. The pipeline is identical for SE\n(STATE), scGPT, scConcept, SCimilarity, or your own FM — only step 1\nswaps the wrapper class.\n\n**Pipeline**\n\n0. **Data** — load expression, split train / test.\n1. **Embed** — run the FM on both splits, store at `adata.obsm[\"X_fm\"]`.\n2. **Train a lightweight MLP decoder** on `(Z_train, X_train)`.\n3. **Reconstruct** — decode the held-out embeddings into `adata_pred`.\n4. **Score** — `compute_all_metrics(adata_test, adata_pred)`.\n5. **Compare multiple FMs** — stack scores and render the funky map.\n\nWe use **SE** as the concrete FM (it runs in the same `cstm_scvi_env`\nas the rest of the tutorial). The other FMs each need their own conda\nenv; swap the wrapper class in step 1 and the rest of the pipeline is\nunchanged."
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "imports",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-06-07T17:30:12.968109Z",
+     "iopub.status.busy": "2026-06-07T17:30:12.967675Z",
+     "iopub.status.idle": "2026-06-07T17:36:11.459837Z",
+     "shell.execute_reply": "2026-06-07T17:36:11.458021Z"
+    }
+   },
+   "outputs": [],
+   "source": "import os, sys, warnings\nfrom pathlib import Path\n\n# Disable tqdm progress bars: in nbconvert, tqdm + state's dataloader\n# workers stall the kernel via the ZMQ stdout pipe (see fm.ipynb timeouts).\n# Has to be set BEFORE any module imports tqdm.\nos.environ[\"TQDM_DISABLE\"] = \"1\"\n\n# Prefer the public src over any pip-installed sc_reconstruction (which may\n# come from a stale private clone in the active env).\nsys.path.insert(0, str(Path(\"..\").resolve() / \"src\"))\n\nimport numpy as np\nimport pandas as pd\nimport scanpy as sc\nimport torch\nimport lightning as L\nfrom anndata import AnnData\nfrom torch.utils.data import DataLoader, Dataset\n\nwarnings.filterwarnings(\"ignore\")"
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "fm-import",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-06-07T17:36:11.470955Z",
+     "iopub.status.busy": "2026-06-07T17:36:11.469999Z",
+     "iopub.status.idle": "2026-06-07T17:36:19.034700Z",
+     "shell.execute_reply": "2026-06-07T17:36:19.033847Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "# Pick ONE FM. The others are listed for reference — uncomment the one whose\n",
+    "# weights you have and whose env you are running in.\n",
+    "\n",
+    "from sc_reconstruction.models.reconse import ReconPretrainedStateModel\n",
+    "# from sc_reconstruction.models.reconscgpt       import ReconPretrainedscGPT\n",
+    "# from sc_reconstruction.models.reconscconcept   import ReconPretrainedscConcept\n",
+    "# from sc_reconstruction.models.reconscimilarity import ReconPretrainedscimilarity"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "data-md",
+   "metadata": {},
+   "source": "## 0. Data — perturbed / control split\n\nWe use the tutorial-sized LuCA panel that ships with the repo (500 cells,\n643 genes, already normalised + log1p, gene symbols match the cell-cycle /\nPROGENy / cytokine resource lists).\n\nLuCA's `obs['origin']` separates the cells into matched\n*tumor_primary* (perturbed) and *normal_adjacent* (control) groups —\nthe same split used by the paper's eval scripts so the DEG metric can\ncompare predicted-vs-true differential genes. We hold out 20% of the\ntumor cells for evaluation; the control cells are used in full as the\nreference."
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "data-code",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-06-07T17:36:19.036694Z",
+     "iopub.status.busy": "2026-06-07T17:36:19.036528Z",
+     "iopub.status.idle": "2026-06-07T17:38:39.870616Z",
+     "shell.execute_reply": "2026-06-07T17:38:39.870072Z"
+    }
+   },
+   "outputs": [],
+   "source": "from sc_reconstruction.metrics import (\n    load_cell_cycle_genes, load_progeny, load_cytokine_dict_from_csv,\n)\n\nFROZEN   = Path(\"../analysis/data/frozen\")\nCYTO_CSV = FROZEN / \"cytokine_act_merged.csv\"\n\nadata = sc.read_h5ad(FROZEN / \"luca_demo.h5ad\")\n\n# Perturbed = tumor_primary, control = normal_adjacent. The split column\n# is `origin`; in the paper's experiments/03_latent_shift eval scripts the\n# control key is `<study>-<tissue>-normal_adjacent`.\npert_mask = adata.obs[\"origin\"] == \"tumor_primary\"\nctrl_mask = adata.obs[\"origin\"] == \"normal_adjacent\"\nadata_pert = adata[pert_mask].copy()\nadata_ctrl = adata[ctrl_mask].copy()\nprint(f\"perturbed (tumor_primary):  {adata_pert.shape}\")\nprint(f\"control   (normal_adjacent):{adata_ctrl.shape}\")\n\n# Hold out 20% of the tumor cells for evaluation.\nrng = np.random.default_rng(0)\nperm = rng.permutation(adata_pert.n_obs)\nsplit = int(0.8 * adata_pert.n_obs)\nadata_train = adata_pert[perm[:split]].copy()\nadata_test  = adata_pert[perm[split:]].copy()\nprint(f\"train tumor: {adata_train.shape}  test tumor: {adata_test.shape}\")\n\n# Resources for the biological metrics later on.\ns_genes, g2m_genes = load_cell_cycle_genes(FROZEN / \"regev_lab_cell_cycle_genes.txt\")\nprogeny   = load_progeny(organism=\"human\")\ncytokines = load_cytokine_dict_from_csv(CYTO_CSV, celltype=\"B_cell\")\nprint(f\"{len(s_genes)} S genes, {len(g2m_genes)} G2M genes, \"\n      f\"{progeny['source'].nunique()} PROGENy pathways, {len(cytokines)} cytokines\")"
+  },
+  {
+   "cell_type": "markdown",
+   "id": "embed-md",
+   "metadata": {},
+   "source": "## 1. Embed with a foundation model\n\nInstantiate the FM and embed all three sets — train (tumor), test\n(held-out tumor), and the control reference. The decoder (step 2) trains\non `Z_train` and is scored against `adata_test`; the control embeddings\nare decoded too so the DEG metric in step 4 can compare predicted\nDEGs (held-out tumor vs decoded control) against true DEGs.\n\nNote: SE-600M takes ~15–20 min of one-time import + checkpoint load\nbefore the first forward pass; the actual encoding of 500 cells is\n~20 s on an A100/H100. Run this notebook on a GPU node."
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "embed-code",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-06-07T17:38:39.875649Z",
+     "iopub.status.busy": "2026-06-07T17:38:39.875097Z",
+     "iopub.status.idle": "2026-06-07T17:42:42.262321Z",
+     "shell.execute_reply": "2026-06-07T17:42:42.261843Z"
+    }
+   },
+   "outputs": [],
+   "source": "# Point at your SE checkpoint files. We read from env vars so the rendered\n# tutorial doesn't bake in machine-specific paths — set them before running:\n#   export SE_CKPT=/path/to/se600m_epoch16.ckpt\n#   export SE_PROTEIN=/path/to/protein_embeddings.pt\nSE_CKPT    = os.environ.get(\"SE_CKPT\",    \"your-ckpt-path/se600m_epoch16.ckpt\")\nSE_PROTEIN = os.environ.get(\"SE_PROTEIN\", \"your-ckpt-path/protein_embeddings.pt\")\n\nfm = ReconPretrainedStateModel(\n    checkpoint_path=SE_CKPT,\n    protein_embeds_path=SE_PROTEIN,\n    emb_key=\"X_fm\",\n    encode_batch_size=64,\n)\nfm.set_genes(adata_train.var_names.tolist())\n\nadata_train.obsm[\"X_fm\"] = fm.get_latent_representation(adata_train)\nadata_test .obsm[\"X_fm\"] = fm.get_latent_representation(adata_test)\nadata_ctrl .obsm[\"X_fm\"] = fm.get_latent_representation(adata_ctrl)\nprint(f\"train embedding: {adata_train.obsm['X_fm'].shape}\")\nprint(f\"test  embedding: {adata_test .obsm['X_fm'].shape}\")\nprint(f\"ctrl  embedding: {adata_ctrl .obsm['X_fm'].shape}\")"
+  },
+  {
+   "cell_type": "markdown",
+   "id": "step2-md",
+   "metadata": {},
+   "source": "## 2. Train a lightweight MLP decoder\n\nThe MLP decoder maps an FM embedding back to gene expression. We use the\npackage's `ReconMLPDecoder` here; any module with a `decode(Z) -> X`\nmethod works in its place. The data module just yields\n`{'x': expression, 'z': embedding}` batches."
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "dm-code",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-06-07T17:42:42.264677Z",
+     "iopub.status.busy": "2026-06-07T17:42:42.264346Z",
+     "iopub.status.idle": "2026-06-07T17:42:42.269955Z",
+     "shell.execute_reply": "2026-06-07T17:42:42.269541Z"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "class _ZXDataset(Dataset):\n",
+    "    def __init__(self, Z, X):\n",
+    "        self.Z = torch.as_tensor(Z, dtype=torch.float32)\n",
+    "        self.X = torch.as_tensor(X, dtype=torch.float32)\n",
+    "\n",
+    "    def __len__(self):\n",
+    "        return len(self.X)\n",
+    "\n",
+    "    def __getitem__(self, i):\n",
+    "        return {\"z\": self.Z[i], \"x\": self.X[i]}\n",
+    "\n",
+    "\n",
+    "class EmbeddingDataModule(L.LightningDataModule):\n",
+    "    def __init__(self, Z, X, batch_size=64, val_frac=0.1, seed=0):\n",
+    "        super().__init__()\n",
+    "        rng = np.random.default_rng(seed)\n",
+    "        perm = rng.permutation(X.shape[0])\n",
+    "        n_val = int(X.shape[0] * val_frac)\n",
+    "        self._train = _ZXDataset(Z[perm[n_val:]], X[perm[n_val:]])\n",
+    "        self._val   = _ZXDataset(Z[perm[:n_val]], X[perm[:n_val]])\n",
+    "        self.batch_size = batch_size\n",
+    "\n",
+    "    def train_dataloader(self):\n",
+    "        return DataLoader(self._train, batch_size=self.batch_size, shuffle=True)\n",
+    "\n",
+    "    def val_dataloader(self):\n",
+    "        return DataLoader(self._val, batch_size=self.batch_size)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "train-code",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-06-07T17:42:42.271369Z",
+     "iopub.status.busy": "2026-06-07T17:42:42.271209Z",
+     "iopub.status.idle": "2026-06-07T17:43:15.263696Z",
+     "shell.execute_reply": "2026-06-07T17:43:15.263142Z"
+    }
+   },
+   "outputs": [],
+   "source": "from sc_reconstruction.decoders.reconmlp import ReconMLPDecoder\n\nembed_dim = adata_train.obsm[\"X_fm\"].shape[1]\ndec = ReconMLPDecoder(\n    n_input=embed_dim,\n    n_output=adata_train.n_vars,\n    n_hidden=512,\n    n_layers=2,\n    distribution=\"normal\",\n    learning_rate=1e-3,\n)\n\ndm = EmbeddingDataModule(adata_train.obsm[\"X_fm\"], adata_train.X, batch_size=64)\ndec.train(datamodule=dm, max_epochs=100, accelerator=\"auto\",\n          enable_progress_bar=False, logger=False)"
+  },
+  {
+   "cell_type": "markdown",
+   "id": "predict-md",
+   "metadata": {},
+   "source": "## 3. Reconstruct the held-out cells\n\nDecode the test (held-out tumor) and control embeddings back to gene\nspace. The DEG metric in step 4 needs all four AnnDatas:\n`(adata_test, adata_pred)` for the predicted-vs-true tumor side, plus\n`(adata_ctrl, adata_ctrl_pred)` as the reference pair."
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "predict-code",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-06-07T17:43:15.291667Z",
+     "iopub.status.busy": "2026-06-07T17:43:15.291403Z",
+     "iopub.status.idle": "2026-06-07T17:43:17.308263Z",
+     "shell.execute_reply": "2026-06-07T17:43:17.307698Z"
+    }
+   },
+   "outputs": [],
+   "source": "X_pred      = dec.decode(adata_test.obsm[\"X_fm\"])\nX_ctrl_pred = dec.decode(adata_ctrl.obsm[\"X_fm\"])\n\nadata_pred      = AnnData(X_pred     .astype(np.float32), var=adata_test.var, obs=adata_test.obs.copy())\nadata_ctrl_pred = AnnData(X_ctrl_pred.astype(np.float32), var=adata_ctrl.var, obs=adata_ctrl.obs.copy())\nprint(\"pred (held-out tumor) :\", adata_pred.shape)\nprint(\"pred (control)        :\", adata_ctrl_pred.shape)"
+  },
+  {
+   "cell_type": "markdown",
+   "id": "score-md",
+   "metadata": {},
+   "source": "## 4. Score\n\nHand the `(true, predicted)` held-out pair to the metrics API, plus\n`deg_refs=(adata_ctrl, adata_ctrl_pred)` so the DEG metric can compute\ndifferential genes on both sides. `min_cells=5` lowers the per-gene\nexpression cutoff so the cell-cycle and pathway metrics work on the\nsmall tutorial slice (the paper uses the default of 20 on its full\ntest splits)."
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "score-code",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2026-06-07T17:43:17.310306Z",
+     "iopub.status.busy": "2026-06-07T17:43:17.310045Z",
+     "iopub.status.idle": "2026-06-07T17:43:18.553576Z",
+     "shell.execute_reply": "2026-06-07T17:43:18.553107Z"
+    }
+   },
+   "outputs": [],
+   "source": "from sc_reconstruction.metrics import compute_all_metrics\n\nscores_se = compute_all_metrics(\n    adata_test, adata_pred,\n    s_genes=s_genes, g2m_genes=g2m_genes,\n    progeny_model=progeny,\n    cytokine_dict=cytokines,\n    deg_refs=(adata_ctrl, adata_ctrl_pred),\n    min_cells=5,\n)\npd.Series(scores_se, name=\"SE\").to_frame()"
+  },
+  {
+   "cell_type": "markdown",
+   "id": "82ab27af",
+   "source": "**`deg_dice_at_100 = 0`.** Top-100/643 (≈15.6%) Wilcoxon intersection\non 42 tumor vs 76 control cells is too narrow to be rank-stable: PCA-128\n(R² = 0.97) also returns 0 while `deg_logfc_spearman` stays at ~0.3–0.5,\nso the gene-wise direction is preserved and only the cutoff collapses.\nThe paper's full splits (much larger N per group) stabilize it.",
+   "metadata": {}
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2c7d66e2",
+   "source": "## 5. Compare multiple foundation models\n\nTo compare FMs, stack the per-method score dicts into a wide DataFrame\n(rows = method, columns = metric) and feed it to `funky_heatmap`.\n\nWe can't run every FM in the same Python process — each lives in its\nown conda env — so the realistic workflow is:\n\n1. Run steps 0–4 once **per FM**, in the matching env, saving the\n   `compute_all_metrics` output as a JSON / CSV.\n2. Load all of them into one DataFrame and call `funky_heatmap` once.\n\nTo show the pattern end-to-end inside a single notebook we substitute\ntwo PCA baselines for the other FMs. Replace those rows with the score\ndicts you saved from your scGPT / scConcept / SCimilarity runs.",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "id": "2842f6a2",
+   "source": "from sklearn.decomposition import PCA\nfrom sc_reconstruction.metrics import funky_heatmap\n\nscored = {\"SE\": scores_se}\n\n# Two PCA baselines as stand-ins for the other FMs.\nfor d in (32, 128):\n    pca = PCA(n_components=d, random_state=0).fit(adata_train.X)\n    X_pca_test = pca.inverse_transform(pca.transform(adata_test.X)).astype(np.float32)\n    X_pca_ctrl = pca.inverse_transform(pca.transform(adata_ctrl.X)).astype(np.float32)\n    adata_pca_test = AnnData(X_pca_test, var=adata_test.var, obs=adata_test.obs.copy())\n    adata_pca_ctrl = AnnData(X_pca_ctrl, var=adata_ctrl.var, obs=adata_ctrl.obs.copy())\n    scored[f\"PCA-{d}\"] = compute_all_metrics(\n        adata_test, adata_pca_test,\n        s_genes=s_genes, g2m_genes=g2m_genes,\n        progeny_model=progeny,\n        cytokine_dict=cytokines,\n        deg_refs=(adata_ctrl, adata_pca_ctrl),\n        min_cells=5,\n    )\n\nraw = pd.DataFrame(scored).T\nprint(raw.to_string(float_format=lambda x: f\"{x:.4f}\"))\n\nax = funky_heatmap(raw, title=\"FM × decoder reconstruction\")",
+   "metadata": {},
+   "execution_count": null,
+   "outputs": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "byo-md",
+   "metadata": {},
+   "source": "## Bringing your own FM\n\nImplement two methods and the rest of the pipeline is unchanged:\n\n```python\nclass MyFM:\n    def set_genes(self, genes: list[str]) -> None:\n        \"\"\"Record the gene panel — needed by some FMs for tokenization.\"\"\"\n        ...\n\n    def get_latent_representation(self, adata: AnnData) -> np.ndarray:\n        \"\"\"Return an (n_cells, d) embedding for adata.\"\"\"\n        ...\n```\n\nThen plug it into step 1:\n\n```python\nfm = MyFM()\nfm.set_genes(adata_train.var_names.tolist())\nadata_train.obsm[\"X_fm\"] = fm.get_latent_representation(adata_train)\nadata_test .obsm[\"X_fm\"] = fm.get_latent_representation(adata_test)\n# steps 2–5 run unchanged.\n```\n\nThe four reference wrappers in `sc_reconstruction.models` follow\nexactly this contract."
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

@@ -1,0 +1,41 @@
+defaults:
+  - model: eval/scVI
+  - projector: PCA  # Include the projector configuration
+  - _self_  # specify priority
+
+precision: high
+split: split03
+
+inference_kwargs:
+  n_samples: 1
+
+batch_size: 5
+max_cells: 1000000
+max_workers: 8
+
+sample_fraction: 0.1
+seed: 42
+
+dynamic_model_loading: true
+
+model_data: tahoe
+eval_data: tahoe
+
+eval_args: 
+  tahoe:
+    path: "/lustre/groups/ml01/workspace/xiaotong.fu/reconstruction/comb_w_obs/cl_drg_dos.zarr"
+    split_key:
+      - cell_line
+      - drug
+      - dosage
+  luca: 
+    path: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/luca/comb_w_obs/ct_ds_orig.zarr"
+    split_key:
+      - cell_type
+      - dataset
+      - origin
+
+eval_path: ${eval_args.${eval_data}.path}
+split_key: ${eval_args.${eval_data}.split_key}
+output:
+  save_path: "/lustre/groups/ml01/workspace/egor.antipov/reconstruction/reconstruction/results/${eval_data}_data/${model_data}_model/sampled/${model.meta.name}/${split}/knn_${model.model_args.n_neighbors}/projected_metrics/sampled_${sample_fraction}_${seed}_metrics.csv" 

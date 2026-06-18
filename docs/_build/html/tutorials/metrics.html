@@ -1,0 +1,1104 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Computing the metrics &#8212; ReconEval</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=f3ae5b26" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+    <script src="../_static/documentation_options.js?v=6d92e2be"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/metrics';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="End-to-end reconstruction" href="end_to_end.html" />
+    <link rel="prev" title="Tutorials" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ReconEval</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../experiments.html">
+    Experiments
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../reproducibility.html">
+    Reproducibility
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/theislab/ReconEval" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../experiments.html">
+    Experiments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reproducibility.html">
+    Reproducibility
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/theislab/ReconEval" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Computing the metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end_to_end.html">End-to-end reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fm.html">Foundation-model reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="latent_shift.html">Latent-shift reconstruction (perturbation prediction)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Computing the metrics</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="computing-the-metrics">
+<h1>Computing the metrics<a class="headerlink" href="#computing-the-metrics" title="Link to this heading">#</a></h1>
+<p>ReconEval scores a <code class="docutils literal notranslate"><span class="pre">(true,</span> <span class="pre">reconstructed)</span></code> AnnData pair against the
+statistical, biological and perturbational metrics used in the paper.
+This page covers the user-facing API one metric at a time, then the
+one-call wrapper and the rank-percentile aggregation used for
+cross-method comparisons.</p>
+<p>The same code applies to any reconstruction output — PCA, AE, VAE,
+foundation-model + decoder, perturbation prediction. Swap the loader
+cell for your own data and the rest of the notebook is unchanged.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span><span class="o">,</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Prefer the public src over any pip-installed sc_reconstruction (which may</span>
+<span class="c1"># come from a stale private clone in the active env).</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;src&quot;</span><span class="p">))</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnnData</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sc_reconstruction.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">load_cell_cycle_genes</span><span class="p">,</span> <span class="n">load_cytokine_dict_from_csv</span><span class="p">,</span> <span class="n">load_progeny</span><span class="p">,</span>
+    <span class="n">metric_r2</span><span class="p">,</span> <span class="n">metric_mse</span><span class="p">,</span> <span class="n">metric_energy_distance</span><span class="p">,</span>
+    <span class="n">metric_cellcycle</span><span class="p">,</span> <span class="n">metric_pathway</span><span class="p">,</span> <span class="n">metric_coexpression</span><span class="p">,</span> <span class="n">metric_deg</span><span class="p">,</span> <span class="n">metric_cytokine</span><span class="p">,</span>
+    <span class="n">compute_statistical_metrics</span><span class="p">,</span> <span class="n">compute_all_metrics</span><span class="p">,</span> <span class="n">aggregate_rank_percentile</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/xiaotong.fu/miniconda3/envs/cstm_scvi_env/lib/python3.12/site-packages/scanpy/_utils/__init__.py:35: FutureWarning: `__version__` is deprecated, use `importlib.metadata.version(&#39;anndata&#39;)` instead.
+  from anndata import __version__ as anndata_version
+/home/icb/xiaotong.fu/miniconda3/envs/cstm_scvi_env/lib/python3.12/site-packages/scanpy/__init__.py:24: FutureWarning: `__version__` is deprecated, use `importlib.metadata.version(&#39;anndata&#39;)` instead.
+  if Version(anndata.__version__) &gt;= Version(&quot;0.11.0rc2&quot;):
+/home/icb/xiaotong.fu/miniconda3/envs/cstm_scvi_env/lib/python3.12/site-packages/scanpy/readwrite.py:15: FutureWarning: `__version__` is deprecated, use `importlib.metadata.version(&#39;anndata&#39;)` instead.
+  if Version(anndata.__version__) &gt;= Version(&quot;0.11.0rc2&quot;):
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/xiaotong.fu/miniconda3/envs/cstm_scvi_env/lib/python3.12/site-packages/cudf/utils/_ptxcompiler.py:64: UserWarning: Error getting driver and runtime versions:
+
+stdout:
+
+
+
+stderr:
+
+Traceback (most recent call last):
+  File &quot;&lt;string&gt;&quot;, line 4, in &lt;module&gt;
+  File &quot;/home/icb/xiaotong.fu/miniconda3/envs/cstm_scvi_env/lib/python3.12/site-packages/numba_cuda/numba/cuda/cudadrv/driver.py&quot;, line 314, in __getattr__
+    raise CudaSupportError(&quot;Error at driver init: \n%s:&quot; %
+numba.cuda.cudadrv.error.CudaSupportError: Error at driver init: 
+
+CUDA driver library cannot be found.
+If you are sure that a CUDA driver is installed,
+try setting environment variable NUMBA_CUDA_DRIVER
+with the file path of the CUDA driver shared library.
+:
+
+
+Not patching Numba
+  warnings.warn(msg, UserWarning)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/icb/xiaotong.fu/miniconda3/envs/cstm_scvi_env/lib/python3.12/site-packages/cudf/utils/gpu_utils.py:62: UserWarning: Failed to dlopen libcuda.so.1
+  warnings.warn(str(e))
+</pre></div>
+</div>
+</div>
+</div>
+<section id="example-pair">
+<h2>Example pair<a class="headerlink" href="#example-pair" title="Link to this heading">#</a></h2>
+<p>We use the tutorial-sized LuCA panel that ships with the repo (500 cells
+× 643 genes, already normalised + log1p, gene symbols overlap the
+cell-cycle / PROGENy / cytokine resources). We build a paired example by
+splitting it into control / perturbed halves, perturbing 30 random genes
+in the perturbed half, and producing a “reconstructed” copy by adding
+small Gaussian noise to the truth.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scanpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sc</span>
+
+<span class="n">FROZEN</span>   <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../analysis/data/frozen&quot;</span><span class="p">)</span>
+<span class="n">CC_FILE</span>  <span class="o">=</span> <span class="n">FROZEN</span> <span class="o">/</span> <span class="s2">&quot;regev_lab_cell_cycle_genes.txt&quot;</span>
+<span class="n">CYTO_CSV</span> <span class="o">=</span> <span class="n">FROZEN</span> <span class="o">/</span> <span class="s2">&quot;cytokine_act_merged.csv&quot;</span>
+
+<span class="c1"># LuCA demo: 500 cells × 643 genes (log-normalised, gene-symbol indexed).</span>
+<span class="n">luca</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">read_h5ad</span><span class="p">(</span><span class="n">FROZEN</span> <span class="o">/</span> <span class="s2">&quot;luca_demo.h5ad&quot;</span><span class="p">)</span>
+<span class="n">genes</span> <span class="o">=</span> <span class="n">luca</span><span class="o">.</span><span class="n">var_names</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">var</span>   <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">genes</span><span class="p">)</span>
+
+<span class="c1"># Split LuCA in half: control vs perturbed.</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">perm</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">luca</span><span class="o">.</span><span class="n">n_obs</span><span class="p">)</span>
+<span class="n">half</span> <span class="o">=</span> <span class="n">luca</span><span class="o">.</span><span class="n">n_obs</span> <span class="o">//</span> <span class="mi">2</span>
+<span class="n">X_ctrl_base</span> <span class="o">=</span> <span class="n">luca</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="n">perm</span><span class="p">[:</span><span class="n">half</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">X_pert_base</span> <span class="o">=</span> <span class="n">luca</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="n">perm</span><span class="p">[</span><span class="n">half</span><span class="p">:]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="c1"># Truth: control + a 30-gene additive shift in the perturbed half.</span>
+<span class="n">de_idx</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">X_ctrl</span> <span class="o">=</span> <span class="n">X_ctrl_base</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">X_pert</span> <span class="o">=</span> <span class="n">X_pert_base</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">X_pert</span><span class="p">[:,</span> <span class="n">de_idx</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.5</span>  <span class="c1"># shift on log scale (~4-5x fold change)</span>
+
+<span class="c1"># Reconstruction: truth + small Gaussian noise.</span>
+<span class="n">Xh_ctrl</span> <span class="o">=</span> <span class="n">X_ctrl</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">X_ctrl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">Xh_pert</span> <span class="o">=</span> <span class="n">X_pert</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">X_pert</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">adata</span>      <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">X_pert</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>  <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+<span class="n">recon</span>      <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">Xh_pert</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+<span class="n">ctrl</span>       <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">X_ctrl</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>  <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+<span class="n">ctrl_recon</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">Xh_ctrl</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+
+<span class="c1"># Metric resources.</span>
+<span class="n">s_genes</span><span class="p">,</span> <span class="n">g2m_genes</span> <span class="o">=</span> <span class="n">load_cell_cycle_genes</span><span class="p">(</span><span class="n">CC_FILE</span><span class="p">)</span>
+<span class="n">progeny</span>   <span class="o">=</span> <span class="n">load_progeny</span><span class="p">(</span><span class="n">organism</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">)</span>
+<span class="n">cytokines</span> <span class="o">=</span> <span class="n">load_cytokine_dict_from_csv</span><span class="p">(</span><span class="n">CYTO_CSV</span><span class="p">,</span> <span class="n">celltype</span><span class="o">=</span><span class="s2">&quot;B_cell&quot;</span><span class="p">,</span> <span class="n">fdr_threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">adata</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">s_genes</span><span class="p">)</span><span class="si">}</span><span class="s2"> S genes, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">g2m_genes</span><span class="p">)</span><span class="si">}</span><span class="s2"> G2M genes&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">progeny</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">}</span><span class="s2"> PROGENy pathways, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cytokines</span><span class="p">)</span><span class="si">}</span><span class="s2"> cytokines&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AnnData object with n_obs × n_vars = 250 × 643
+
+43 S genes, 54 G2M genes
+14 PROGENy pathways, 43 cytokines
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="statistical-metrics">
+<h2>Statistical metrics<a class="headerlink" href="#statistical-metrics" title="Link to this heading">#</a></h2>
+<p>Each <code class="docutils literal notranslate"><span class="pre">metric_*</span></code> takes <code class="docutils literal notranslate"><span class="pre">(truth,</span> <span class="pre">reconstruction)</span></code> and returns a scalar. R² is higher-is-better,
+the others are lower-is-better.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;R^2              = </span><span class="si">{</span><span class="n">metric_r2</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="w"> </span><span class="n">recon</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MSE              = </span><span class="si">{</span><span class="n">metric_mse</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="w"> </span><span class="n">recon</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Energy distance  = </span><span class="si">{</span><span class="n">metric_energy_distance</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span><span class="w"> </span><span class="n">recon</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">compute_statistical_metrics</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">recon</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R^2              = 0.9988
+MSE              = 0.0401
+Energy distance  = 0.1725
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;r2&#39;: 0.9988042712211609,
+ &#39;mse&#39;: 0.040113721042871475,
+ &#39;energy_distance&#39;: 0.1724863052368164}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="biological-metrics">
+<h2>Biological metrics<a class="headerlink" href="#biological-metrics" title="Link to this heading">#</a></h2>
+<p>Each biological metric scores the truth and the reconstruction with the same procedure and
+correlates them. Resources (gene lists, pathway weights, cytokine signatures) are passed
+explicitly so the call is reproducible offline.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cell-cycle phase agreement.</span>
+<span class="n">cc</span> <span class="o">=</span> <span class="n">metric_cellcycle</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">recon</span><span class="p">,</span>
+                      <span class="n">s_genes</span><span class="o">=</span><span class="n">s_genes</span><span class="p">,</span> <span class="n">g2m_genes</span><span class="o">=</span><span class="n">g2m_genes</span><span class="p">,</span>
+                      <span class="n">min_cells</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;proportion_same_phase =&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="s2">&quot;proportion_same_phase&quot;</span><span class="p">],</span> <span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;proportion_mean_diff  =&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="s2">&quot;proportion_mean_diff&quot;</span><span class="p">],</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>proportion_same_phase = 0.648
+proportion_mean_diff  = 0.128
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PROGENy pathway scores per cell, correlated across cells per pathway.</span>
+<span class="n">pathway_corr</span> <span class="o">=</span> <span class="n">metric_pathway</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">recon</span><span class="p">,</span>
+                              <span class="n">progeny_model</span><span class="o">=</span><span class="n">progeny</span><span class="p">,</span>
+                              <span class="n">correlation_measure</span><span class="o">=</span><span class="s2">&quot;spearman&quot;</span><span class="p">,</span>
+                              <span class="n">min_cells</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">overlap_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pathway corr (mean over pathways) = </span><span class="si">{</span><span class="n">pathway_corr</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pathway corr (mean over pathways) = 0.8614
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># MSigDB Hallmark gene-set co-expression. Omit `geneset_dict` to fetch from omnipath.</span>
+<span class="n">coexpr</span> <span class="o">=</span> <span class="n">metric_coexpression</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">recon</span><span class="p">,</span>
+                             <span class="n">correlation_measure</span><span class="o">=</span><span class="s2">&quot;spearman&quot;</span><span class="p">,</span>
+                             <span class="n">min_cells</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">overlap_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;coexpression similarity = </span><span class="si">{</span><span class="n">coexpr</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:33 | [INFO] Downloading data from `https://omnipathdb.org/queries/enzsub?format=json`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:33 | [INFO] Downloading data from `https://omnipathdb.org/queries/interactions?format=json`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:33 | [INFO] Downloading data from `https://omnipathdb.org/queries/complexes?format=json`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:33 | [INFO] Downloading data from `https://omnipathdb.org/queries/annotations?format=json`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:34 | [INFO] Downloading data from `https://omnipathdb.org/queries/intercell?format=json`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:34 | [INFO] Downloading data from `https://omnipathdb.org/about?format=text`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:34 | [INFO] Downloading annotations for all proteins from the following resources: `[&#39;MSigDB&#39;]`
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>coexpression similarity = 0.9537
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># DEG recovery: compare true (pert-vs-ctrl) DEGs against reconstructed (pert-vs-ctrl) DEGs.</span>
+<span class="n">deg</span> <span class="o">=</span> <span class="n">metric_deg</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">recon</span><span class="p">,</span>
+                 <span class="n">ref_true</span><span class="o">=</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">ref_pred</span><span class="o">=</span><span class="n">ctrl_recon</span><span class="p">,</span>
+                 <span class="n">method</span><span class="o">=</span><span class="s2">&quot;wilcoxon&quot;</span><span class="p">,</span> <span class="n">dice_k</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="n">min_cells</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">deg</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">36s</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  true_deg_dice_50                     = 0.9375
+  true_deg_dice_100                    = 0.9375
+  true_deg_pearson                     = nan
+  true_deg_spearman                    = nan
+  true_deg_pearson_orig_50             = 0.9999334812164307
+  true_deg_spearman_orig_50            = 0.9982202447163514
+  true_deg_pearson_orig_100            = 0.9999334812164307
+  true_deg_spearman_orig_100           = 0.9982202447163514
+  true_mean_genediff_pearson           = 0.999174952507019
+  true_mean_genediff_spearman          = 0.808895023954095
+  pred_deg_dice_50                     = 0.9523809523809523
+  pred_deg_dice_100                    = 0.9523809523809523
+  pred_deg_pearson                     = nan
+  pred_deg_spearman                    = nan
+  pred_deg_pearson_orig_50             = nan
+  pred_deg_spearman_orig_50            = nan
+  pred_deg_pearson_orig_100            = nan
+  pred_deg_spearman_orig_100           = nan
+  pred_mean_genediff_pearson           = 0.9983597993850708
+  pred_mean_genediff_spearman          = 0.7283951136943941
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cytokine activity: score each Immune-Dictionary signature on both sides, correlate.</span>
+<span class="n">cyto</span> <span class="o">=</span> <span class="n">metric_cytokine</span><span class="p">(</span><span class="n">adata</span><span class="p">,</span> <span class="n">recon</span><span class="p">,</span>
+                       <span class="n">cytokine_dict</span><span class="o">=</span><span class="n">cytokines</span><span class="p">,</span>
+                       <span class="n">correlation</span><span class="o">=</span><span class="s2">&quot;spearman&quot;</span><span class="p">,</span>
+                       <span class="n">min_genes</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cytokine corr (Spearman) = </span><span class="si">{</span><span class="n">cyto</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cytokine corr (Spearman) = 0.9341
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="all-metrics-in-one-call">
+<h2>All metrics in one call<a class="headerlink" href="#all-metrics-in-one-call" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">compute_all_metrics</span></code> runs every metric whose required inputs are available
+and returns one flat <code class="docutils literal notranslate"><span class="pre">{metric_name:</span> <span class="pre">score}</span></code> dict. Metrics with missing
+inputs come back as <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">compute_all_metrics</span><span class="p">(</span>
+    <span class="n">adata</span><span class="p">,</span> <span class="n">recon</span><span class="p">,</span>
+    <span class="n">s_genes</span><span class="o">=</span><span class="n">s_genes</span><span class="p">,</span> <span class="n">g2m_genes</span><span class="o">=</span><span class="n">g2m_genes</span><span class="p">,</span>
+    <span class="n">progeny_model</span><span class="o">=</span><span class="n">progeny</span><span class="p">,</span>
+    <span class="n">cytokine_dict</span><span class="o">=</span><span class="n">cytokines</span><span class="p">,</span>
+    <span class="n">deg_refs</span><span class="o">=</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">ctrl_recon</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;score&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:44 | [INFO] Downloading annotations for all proteins from the following resources: `[&#39;MSigDB&#39;]`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>r2</th>
+      <td>0.998804</td>
+    </tr>
+    <tr>
+      <th>mse</th>
+      <td>0.040114</td>
+    </tr>
+    <tr>
+      <th>energy_distance</th>
+      <td>0.172486</td>
+    </tr>
+    <tr>
+      <th>cellcycle_proportion_same_phase</th>
+      <td>0.656000</td>
+    </tr>
+    <tr>
+      <th>coexpression</th>
+      <td>0.955467</td>
+    </tr>
+    <tr>
+      <th>pathway</th>
+      <td>0.897377</td>
+    </tr>
+    <tr>
+      <th>deg_dice_at_100</th>
+      <td>0.952381</td>
+    </tr>
+    <tr>
+      <th>deg_logfc_spearman</th>
+      <td>0.728395</td>
+    </tr>
+    <tr>
+      <th>cytokine</th>
+      <td>0.934066</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="rank-percentile-across-methods">
+<h2>Rank-percentile across methods<a class="headerlink" href="#rank-percentile-across-methods" title="Link to this heading">#</a></h2>
+<p>To rank several methods against each other, stack per-metric scores into a DataFrame
+(rows = methods, columns = metrics) and call <code class="docutils literal notranslate"><span class="pre">aggregate_rank_percentile</span></code>. The paper formula is</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{rp}_i(m) = \frac{|M| - \mathrm{rank}_i(m)}{|M| - 1}\]</div>
+<p>with rank 1 = best. Direction (higher- vs lower-is-better) comes from <code class="docutils literal notranslate"><span class="pre">HIGHER_IS_BETTER</span></code>.</p>
+<p>Below we fit PCA at three latent sizes (10, 32, 128) on the truth and use its inverse-transform
+as the reconstruction. The expected outcome is a clean monotonic ranking: PCA-128 should win
+on most metrics, PCA-10 should be worst.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="n">dims</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">128</span><span class="p">]</span>
+<span class="n">scored</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">:</span>
+    <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">X</span><span class="p">]))</span>
+    <span class="n">recon_d</span>      <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">adata</span><span class="o">.</span><span class="n">X</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+    <span class="n">ctrl_recon_d</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">ctrl</span><span class="o">.</span><span class="n">X</span> <span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+    <span class="n">scored</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;PCA-</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">compute_all_metrics</span><span class="p">(</span>
+        <span class="n">adata</span><span class="p">,</span> <span class="n">recon_d</span><span class="p">,</span>
+        <span class="n">s_genes</span><span class="o">=</span><span class="n">s_genes</span><span class="p">,</span> <span class="n">g2m_genes</span><span class="o">=</span><span class="n">g2m_genes</span><span class="p">,</span>
+        <span class="n">progeny_model</span><span class="o">=</span><span class="n">progeny</span><span class="p">,</span>
+        <span class="n">cytokine_dict</span><span class="o">=</span><span class="n">cytokines</span><span class="p">,</span>
+        <span class="n">deg_refs</span><span class="o">=</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">ctrl_recon_d</span><span class="p">),</span>
+    <span class="p">)</span>
+
+<span class="n">raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">scored</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;raw scores:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">float_format</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+<span class="n">rp</span> <span class="o">=</span> <span class="n">aggregate_rank_percentile</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">rank-percentiles (1.0 = best):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">overall (mean rp across metrics):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rp</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:50:54 | [INFO] Downloading annotations for all proteins from the following resources: `[&#39;MSigDB&#39;]`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:51:04 | [INFO] Downloading annotations for all proteins from the following resources: `[&#39;MSigDB&#39;]`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-06-11 00:51:14 | [INFO] Downloading annotations for all proteins from the following resources: `[&#39;MSigDB&#39;]`
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>... storing &#39;group&#39; as categorical
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>raw scores:
+            r2    mse  energy_distance  cellcycle_proportion_same_phase  coexpression  pathway  deg_dice_at_100  deg_logfc_spearman  cytokine
+PCA-10  1.0000 0.0574           0.7947                           0.7880        0.8835   0.6493           0.4615              0.9967    0.9835
+PCA-32  1.0000 0.0416           0.3173                           0.7920        0.9351   0.7825           0.4615              0.9970    0.9835
+PCA-128 1.0000 0.0136           0.0429                           0.8320        0.9649   0.9452           0.6667              0.9994    1.0000
+
+rank-percentiles (1.0 = best):
+          r2  mse  energy_distance  cellcycle_proportion_same_phase  \
+PCA-10   0.0  0.0              0.0                              0.0   
+PCA-32   0.5  0.5              0.5                              0.5   
+PCA-128  1.0  1.0              1.0                              1.0   
+
+         coexpression  pathway  deg_dice_at_100  deg_logfc_spearman  cytokine  
+PCA-10            0.0      0.0             0.25                 0.0      0.25  
+PCA-32            0.5      0.5             0.25                 0.5      0.25  
+PCA-128           1.0      1.0             1.00                 1.0      1.00  
+
+overall (mean rp across metrics):
+PCA-128    1.000
+PCA-32     0.444
+PCA-10     0.056
+dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="funky-heatmap">
+<h2>Funky heatmap<a class="headerlink" href="#funky-heatmap" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">funky_heatmap</span></code> packages the Fig 2 summary view as a one-call plot. Pass the
+raw <code class="docutils literal notranslate"><span class="pre">compute_all_metrics</span></code> matrix (rows = methods, columns = metrics): each
+cell is coloured by the per-column rank-percentile (1.0 = best), a white
+circle’s area scales with that rank-percentile, the raw score is annotated
+in the cell, and the right-hand columns aggregate per family
+(“statistical”, “biological”, “perturbational”) plus an “overall” mean.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sc_reconstruction.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">funky_heatmap</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">funky_heatmap</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PCA latent-size comparison&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f4d04293b1b33014a9de5d4aaeea8f395b27f991cdf75fb48afd7ca6e1b5c274.png" src="../_images/f4d04293b1b33014a9de5d4aaeea8f395b27f991cdf75fb48afd7ca6e1b5c274.png" />
+</div>
+</div>
+<p>For batch evaluation at paper scale (zarr stores, multiprocessing), see
+<code class="docutils literal notranslate"><span class="pre">sc_reconstruction.metrics.base_eval</span></code> (<code class="docutils literal notranslate"><span class="pre">MetricsBatchEvaluator</span></code>) — not
+part of the public API but reachable when needed.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tutorials</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="end_to_end.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">End-to-end reconstruction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-pair">Example pair</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-metrics">Statistical metrics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#biological-metrics">Biological metrics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#all-metrics-in-one-call">All metrics in one call</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rank-percentile-across-methods">Rank-percentile across methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#funky-heatmap">Funky heatmap</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Theis Lab.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

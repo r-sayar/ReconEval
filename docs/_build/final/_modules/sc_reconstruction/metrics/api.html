@@ -1,0 +1,1256 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sc_reconstruction.metrics.api &#8212; ReconEval</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=f3ae5b26" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+    <script src="../../../_static/documentation_options.js?v=6d92e2be"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sc_reconstruction/metrics/api';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ReconEval</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../overview.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../experiments.html">
+    Experiments
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../reproducibility.html">
+    Reproducibility
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/theislab/ReconEval" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../overview.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../experiments.html">
+    Experiments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reproducibility.html">
+    Reproducibility
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/theislab/ReconEval" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">sc_reconstruction.metrics.api</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for sc_reconstruction.metrics.api</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Lightweight metrics API for ReconEval.</span>
+
+<span class="sd">One call per metric on a `(true, predicted)` AnnData pair, plus a single</span>
+<span class="sd">`compute_all_metrics` that runs everything for which the inputs are available.</span>
+
+<span class="sd">The heavy `MetricsBatchEvaluator` family used by the paper&#39;s reproduction</span>
+<span class="sd">pipeline lives in `sc_reconstruction.metrics.base_eval` and the per-family</span>
+<span class="sd">modules; it is not re-exported here.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnnData</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">_u</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Helpers</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_dense</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a dense numpy array, regardless of whether `x` is sparse.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">&quot;toarray&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_pair</span><span class="p">(</span><span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract dense matched `.X` arrays from a (true, predicted) pair.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">adata_true</span><span class="o">.</span><span class="n">n_vars</span> <span class="o">!=</span> <span class="n">adata_pred</span><span class="o">.</span><span class="n">n_vars</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Gene-axis mismatch: true has </span><span class="si">{</span><span class="n">adata_true</span><span class="o">.</span><span class="n">n_vars</span><span class="si">}</span><span class="s2"> vars, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;pred has </span><span class="si">{</span><span class="n">adata_pred</span><span class="o">.</span><span class="n">n_vars</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="s2">&quot;Subset to the same `.var_names` before calling the metrics.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">_as_dense</span><span class="p">(</span><span class="n">adata_true</span><span class="o">.</span><span class="n">X</span><span class="p">),</span> <span class="n">_as_dense</span><span class="p">(</span><span class="n">adata_pred</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Per-metric wrappers (lightweight, no batch evaluator needed)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1"># ---- Statistical ----------------------------------------------------------</span>
+
+<div class="viewcode-block" id="metric_r2">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_r2.html#sc_reconstruction.metrics.metric_r2">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_r2</span><span class="p">(</span><span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;R^2 between summed expression per gene across cells.</span>
+
+<span class="sd">    Wraps :func:`sc_reconstruction.metrics.utils.gene_r_squared`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">_check_pair</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">_u</span><span class="o">.</span><span class="n">gene_r_squared</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="metric_mse">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_mse.html#sc_reconstruction.metrics.metric_mse">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_mse</span><span class="p">(</span><span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mean squared error between matched cells (cell-wise).&quot;&quot;&quot;</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">_check_pair</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;MSE requires matched shapes; got </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">Y</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">X</span> <span class="o">-</span> <span class="n">Y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="metric_energy_distance">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_energy_distance.html#sc_reconstruction.metrics.metric_energy_distance">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_energy_distance</span><span class="p">(</span><span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Energy distance between empirical distributions of cells.</span>
+
+<span class="sd">    Implements the multivariate energy distance of</span>
+<span class="sd">    :cite:`szekely:13`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">_check_pair</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">_u</span><span class="o">.</span><span class="n">energy_distance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">))</span></div>
+
+
+
+<span class="c1"># ---- Biological -----------------------------------------------------------</span>
+
+<div class="viewcode-block" id="metric_cellcycle">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_cellcycle.html#sc_reconstruction.metrics.metric_cellcycle">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_cellcycle</span><span class="p">(</span>
+    <span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">s_genes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">g2m_genes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">min_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cell-cycle phase agreement between true and predicted expression.</span>
+
+<span class="sd">    Cell-cycle scoring follows :cite:`tirosh:16` (the S- and G2M-phase</span>
+<span class="sd">    gene lists shipped with most single-cell pipelines).</span>
+<span class="sd">    Wraps :meth:`CellCycleCalculator.cell_cycle_labeling_similarity`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s_genes, g2m_genes</span>
+<span class="sd">        Gene symbols (matching ``adata_*.var_names``) defining S and G2M</span>
+<span class="sd">        phases. Pass the standard :cite:`tirosh:16` lists or a custom split.</span>
+<span class="sd">    min_cells</span>
+<span class="sd">        Minimum number of cells per gene for inclusion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">._cellcycle</span><span class="w"> </span><span class="kn">import</span> <span class="n">CellCycleCalculator</span>
+
+    <span class="n">cc_genes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">s_genes</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">g2m_genes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">CellCycleCalculator</span><span class="o">.</span><span class="n">cell_cycle_labeling_similarity</span><span class="p">(</span>
+        <span class="n">adata_true</span><span class="o">=</span><span class="n">adata_true</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="n">adata_recon</span><span class="o">=</span><span class="n">adata_pred</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">,</span>
+        <span class="n">cell_cycle_genes</span><span class="o">=</span><span class="n">cc_genes</span><span class="p">,</span>
+        <span class="n">s_genes</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">s_genes</span><span class="p">),</span>
+        <span class="n">g2m_genes</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">g2m_genes</span><span class="p">),</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="metric_coexpression">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_coexpression.html#sc_reconstruction.metrics.metric_coexpression">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_coexpression</span><span class="p">(</span>
+    <span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">geneset_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">correlation_measure</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;spearman&quot;</span><span class="p">,</span>
+    <span class="n">overlap_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="n">min_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mean co-expression similarity over MSigDB Hallmark gene sets.</span>
+
+<span class="sd">    Uses the MSigDB Hallmark collection of :cite:`subramanian:05`,</span>
+<span class="sd">    fetched via OmniPath :cite:`turei:21`.</span>
+<span class="sd">    Wraps :meth:`CoexpressionCalculator.gene_set_coexpression`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    geneset_dict</span>
+<span class="sd">        Mapping from gene-set name to list of gene symbols. If ``None``,</span>
+<span class="sd">        the Hallmark collection :cite:`subramanian:05` is fetched from</span>
+<span class="sd">        MSigDB via ``omnipath`` :cite:`turei:21` (requires the</span>
+<span class="sd">        ``omnipath`` package + internet on first call).</span>
+<span class="sd">    correlation_measure</span>
+<span class="sd">        One of ``&quot;pearson&quot;`` or ``&quot;spearman&quot;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">._coexpression</span><span class="w"> </span><span class="kn">import</span> <span class="n">CoexpressionCalculator</span>
+
+    <span class="k">if</span> <span class="n">geneset_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">omnipath</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">op</span>
+            <span class="n">anns</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">requests</span><span class="o">.</span><span class="n">Annotations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">resources</span><span class="o">=</span><span class="s2">&quot;MSigDB&quot;</span><span class="p">)</span>
+            <span class="n">geneset_dict</span> <span class="o">=</span> <span class="n">CoexpressionCalculator</span><span class="o">.</span><span class="n">_get_msigdb_collection</span><span class="p">(</span><span class="n">anns</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;metric_coexpression: could not fetch MSigDB via omnipath (</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">); &quot;</span>
+                <span class="s2">&quot;pass `geneset_dict` explicitly to skip the network call.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">CoexpressionCalculator</span><span class="o">.</span><span class="n">gene_set_coexpression</span><span class="p">(</span>
+            <span class="n">adata_true</span><span class="o">=</span><span class="n">adata_true</span><span class="p">,</span>
+            <span class="n">adata_recon</span><span class="o">=</span><span class="n">adata_pred</span><span class="p">,</span>
+            <span class="n">overlap_threshold</span><span class="o">=</span><span class="n">overlap_threshold</span><span class="p">,</span>
+            <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">,</span>
+            <span class="n">correlation_measure</span><span class="o">=</span><span class="n">correlation_measure</span><span class="p">,</span>
+            <span class="n">pipeline_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">geneset_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">geneset_dict</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="metric_pathway">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_pathway.html#sc_reconstruction.metrics.metric_pathway">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_pathway</span><span class="p">(</span>
+    <span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">progeny_model</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pathway_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">correlation_measure</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;spearman&quot;</span><span class="p">,</span>
+    <span class="n">overlap_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="n">min_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pathway activity correlation (PROGENy ULM scores).</span>
+
+<span class="sd">    PROGENy pathway weights come from :cite:`schubert:18`; the</span>
+<span class="sd">    univariate-linear-model scoring is provided by ``decoupler``</span>
+<span class="sd">    :cite:`badia:22`.</span>
+<span class="sd">    Wraps :meth:`PathwayCalculator.pathway_score_similarity`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    progeny_model</span>
+<span class="sd">        PROGENy weight DataFrame (from ``decoupler.get_progeny()``,</span>
+<span class="sd">        :cite:`schubert:18,badia:22`). If ``None``, it is fetched lazily.</span>
+<span class="sd">    pathway_dict</span>
+<span class="sd">        Optional explicit pathway → gene list mapping. Falls back to</span>
+<span class="sd">        PROGENy coverage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">._pathway</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathwayCalculator</span>
+
+    <span class="k">if</span> <span class="n">progeny_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">decoupler</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dc</span>
+            <span class="n">progeny_model</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">get_progeny</span><span class="p">(</span><span class="n">organism</span><span class="o">=</span><span class="s2">&quot;human&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;metric_pathway: could not fetch PROGENy via decoupler (</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">); &quot;</span>
+                <span class="s2">&quot;pass `progeny_model` explicitly.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pathway_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pathway_dict</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">progeny_model</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">)[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">PathwayCalculator</span><span class="o">.</span><span class="n">pathway_score_similarity</span><span class="p">(</span>
+            <span class="n">adata_true</span><span class="o">=</span><span class="n">adata_true</span><span class="p">,</span>
+            <span class="n">adata_recon</span><span class="o">=</span><span class="n">adata_pred</span><span class="p">,</span>
+            <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">,</span>
+            <span class="n">overlap_threshold</span><span class="o">=</span><span class="n">overlap_threshold</span><span class="p">,</span>
+            <span class="n">correlation_measure</span><span class="o">=</span><span class="n">correlation_measure</span><span class="p">,</span>
+            <span class="n">pipeline_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">progeny_model</span><span class="o">=</span><span class="n">progeny_model</span><span class="p">,</span>
+            <span class="n">pathway_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pathway_dict</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="metric_deg">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_deg.html#sc_reconstruction.metrics.metric_deg">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_deg</span><span class="p">(</span>
+    <span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">ref_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">ref_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;wilcoxon&quot;</span><span class="p">,</span>
+    <span class="n">dice_k</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,),</span>
+    <span class="n">min_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">set_neg_to_zero</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">fdr_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Differential-expression recovery vs a reference (e.g. control) condition.</span>
+
+<span class="sd">    The Wilcoxon and t-test calls are forwarded to scanpy</span>
+<span class="sd">    :cite:`wolf:18`. The metric computes DEGs of (true vs ref_true) and</span>
+<span class="sd">    (pred vs ref_pred), then reports overlap (Dice@k) and</span>
+<span class="sd">    rank-correlation on the log-fold-changes.</span>
+<span class="sd">    Wraps :meth:`DegCalculator.compute_deg`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ref_true, ref_pred</span>
+<span class="sd">        Reference (e.g. control) condition&#39;s true and predicted expression.</span>
+<span class="sd">    method</span>
+<span class="sd">        ``&quot;wilcoxon&quot;`` or ``&quot;t-test&quot;``. Forwarded to scanpy</span>
+<span class="sd">        :cite:`wolf:18`.</span>
+<span class="sd">    dice_k</span>
+<span class="sd">        K values at which to compute Dice overlap of top-K DEGs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">._deg</span><span class="w"> </span><span class="kn">import</span> <span class="n">DegCalculator</span>
+
+    <span class="n">X_true</span><span class="p">,</span> <span class="n">X_pred</span> <span class="o">=</span> <span class="n">_check_pair</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">)</span>
+    <span class="n">R_true</span><span class="p">,</span> <span class="n">R_pred</span> <span class="o">=</span> <span class="n">_check_pair</span><span class="p">(</span><span class="n">ref_true</span><span class="p">,</span> <span class="n">ref_pred</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">DegCalculator</span><span class="o">.</span><span class="n">compute_deg</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">X_true</span><span class="p">,</span> <span class="n">x_hat</span><span class="o">=</span><span class="n">X_pred</span><span class="p">,</span>
+        <span class="n">refer</span><span class="o">=</span><span class="n">R_true</span><span class="p">,</span> <span class="n">refer_hat</span><span class="o">=</span><span class="n">R_pred</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+        <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">,</span>
+        <span class="n">set_neg_to_zero</span><span class="o">=</span><span class="n">set_neg_to_zero</span><span class="p">,</span>
+        <span class="n">dice_k</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">dice_k</span><span class="p">),</span>
+        <span class="n">compute_mean_diff</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">compute_topk_corr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">fdr_threshold</span><span class="o">=</span><span class="n">fdr_threshold</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="metric_cytokine">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_cytokine.html#sc_reconstruction.metrics.metric_cytokine">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_cytokine</span><span class="p">(</span>
+    <span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">cytokine_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="n">correlation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;spearman&quot;</span><span class="p">,</span>
+    <span class="n">min_genes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="n">ctrl_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+    <span class="n">reducer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cytokine activity similarity (Immune Dictionary :cite:`cui:24`).</span>
+
+<span class="sd">    Cytokine signatures are taken from the Immune Dictionary</span>
+<span class="sd">    :cite:`cui:24`. The underlying calculator returns both Pearson and</span>
+<span class="sd">    Spearman correlations; this wrapper picks one (default Spearman) and</span>
+<span class="sd">    returns the scalar.</span>
+<span class="sd">    Wraps :meth:`CytokineCalculator.cytokine_activity_similarity`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cytokine_dict</span>
+<span class="sd">        Mapping cytokine -&gt; list of genes (Immune Dictionary signature,</span>
+<span class="sd">        :cite:`cui:24`). Build one with :func:`load_cytokine_dict_from_csv`.</span>
+<span class="sd">    correlation</span>
+<span class="sd">        ``&quot;pearson&quot;`` or ``&quot;spearman&quot;`` — which of the two reported</span>
+<span class="sd">        correlations to return.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">._cytokine</span><span class="w"> </span><span class="kn">import</span> <span class="n">CytokineCalculator</span>
+
+    <span class="n">pr</span><span class="p">,</span> <span class="n">sr</span> <span class="o">=</span> <span class="n">CytokineCalculator</span><span class="o">.</span><span class="n">cytokine_activity_similarity</span><span class="p">(</span>
+        <span class="n">adata_true</span><span class="o">=</span><span class="n">adata_true</span><span class="p">,</span>
+        <span class="n">adata_recon</span><span class="o">=</span><span class="n">adata_pred</span><span class="p">,</span>
+        <span class="n">cytokine2genes</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">cytokine_dict</span><span class="p">),</span>
+        <span class="n">min_genes</span><span class="o">=</span><span class="n">min_genes</span><span class="p">,</span>
+        <span class="n">ctrl_size</span><span class="o">=</span><span class="n">ctrl_size</span><span class="p">,</span>
+        <span class="n">n_bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span>
+        <span class="n">reducer</span><span class="o">=</span><span class="n">reducer</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">pr</span><span class="p">[</span><span class="s2">&quot;average&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">correlation</span> <span class="o">==</span> <span class="s2">&quot;pearson&quot;</span> <span class="k">else</span> <span class="n">sr</span><span class="p">[</span><span class="s2">&quot;average&quot;</span><span class="p">])</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Resource loaders — small convenience helpers so users don&#39;t have to wire up</span>
+<span class="c1"># the file formats themselves.</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="load_cell_cycle_genes">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.load_cell_cycle_genes.html#sc_reconstruction.metrics.load_cell_cycle_genes">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_cell_cycle_genes</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load S-phase and G2M-phase gene lists from the Regev-lab text file.</span>
+
+<span class="sd">    The two lists are those of :cite:`tirosh:16`. Format: one gene symbol</span>
+<span class="sd">    per line, first 43 are S-phase, the rest are G2M. The file ships</span>
+<span class="sd">    with the paper artefacts at</span>
+<span class="sd">    ``analysis/data/frozen/regev_lab_cell_cycle_genes.txt``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">genes</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="n">genes</span><span class="p">[:</span><span class="mi">43</span><span class="p">],</span> <span class="n">genes</span><span class="p">[</span><span class="mi">43</span><span class="p">:]</span></div>
+
+
+
+<div class="viewcode-block" id="load_cytokine_dict_from_csv">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.load_cytokine_dict_from_csv.html#sc_reconstruction.metrics.load_cytokine_dict_from_csv">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_cytokine_dict_from_csv</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">celltype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fdr_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">min_genes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a cytokine -&gt; gene-list mapping from the Immune Dictionary CSV.</span>
+
+<span class="sd">    Cytokine signatures are taken from the Immune Dictionary of</span>
+<span class="sd">    :cite:`cui:24`. The CSV at</span>
+<span class="sd">    ``analysis/data/frozen/cytokine_act_merged.csv`` has columns</span>
+<span class="sd">    ``Celltype_Str, Cytokine_Str, Gene, FDR, Avg_log2FC`` (plus a few</span>
+<span class="sd">    others).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    celltype</span>
+<span class="sd">        If given, restrict to one cell-type (e.g. ``&quot;B_cell&quot;``). If</span>
+<span class="sd">        ``None``, cytokine signatures are pooled across all cell types.</span>
+<span class="sd">    fdr_threshold</span>
+<span class="sd">        Drop genes with ``FDR &gt; fdr_threshold`` before grouping. Set to</span>
+<span class="sd">        ``None`` to keep all genes.</span>
+<span class="sd">    min_genes</span>
+<span class="sd">        Drop cytokines with fewer than this many surviving genes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">celltype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Celltype_Str&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">celltype</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">fdr_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;FDR&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">fdr_threshold</span><span class="p">]</span>
+
+    <span class="n">out</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">cyto</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Cytokine_Str&quot;</span><span class="p">):</span>
+        <span class="n">genes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s2">&quot;Gene&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">min_genes</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">cyto</span><span class="p">]</span> <span class="o">=</span> <span class="n">genes</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+
+<div class="viewcode-block" id="load_progeny">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.load_progeny.html#sc_reconstruction.metrics.load_progeny">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_progeny</span><span class="p">(</span><span class="n">organism</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;human&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch the PROGENy :cite:`schubert:18` weight DataFrame via decoupler</span>
+<span class="sd">    :cite:`badia:22`. Cached on first call by decoupler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">decoupler</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dc</span>
+    <span class="k">return</span> <span class="n">dc</span><span class="o">.</span><span class="n">op</span><span class="o">.</span><span class="n">progeny</span><span class="p">(</span><span class="n">organism</span><span class="o">=</span><span class="n">organism</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---- Perturbational -------------------------------------------------------</span>
+
+<div class="viewcode-block" id="metric_knn_purity">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.metric_knn_purity.html#sc_reconstruction.metrics.metric_knn_purity">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metric_knn_purity</span><span class="p">(</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pert_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_ctrl</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">use_rep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;KNN purity of predicted perturbation in a (true-perturbed, control) pool.</span>
+
+<span class="sd">    Wraps :func:`sc_reconstruction.metrics.utils.knn_purity`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    adata_pred</span>
+<span class="sd">        Predicted perturbed cells (the query).</span>
+<span class="sd">    adata_pert_true</span>
+<span class="sd">        Ground-truth perturbed cells (the positive pool).</span>
+<span class="sd">    adata_ctrl</span>
+<span class="sd">        Control cells (the negative pool).</span>
+<span class="sd">    k</span>
+<span class="sd">        Number of neighbors. Returns a float in ``[0, 1]``: 1.0 = all neighbors</span>
+<span class="sd">        are true-perturbed, 0.5 = random baseline.</span>
+<span class="sd">    use_rep</span>
+<span class="sd">        If given, use ``.obsm[use_rep]`` instead of ``.X`` (recommended; KNN in</span>
+<span class="sd">        a learned latent space is far more meaningful than in raw expression).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">use_rep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_as_dense</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_rep</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">obsm</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">use_rep</span><span class="si">!r}</span><span class="s2"> not in .obsm of provided AnnData&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="n">use_rep</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span>
+        <span class="n">_u</span><span class="o">.</span><span class="n">knn_purity</span><span class="p">(</span>
+            <span class="n">X_query</span><span class="o">=</span><span class="n">_get</span><span class="p">(</span><span class="n">adata_pred</span><span class="p">),</span>
+            <span class="n">X_pert</span><span class="o">=</span><span class="n">_get</span><span class="p">(</span><span class="n">adata_pert_true</span><span class="p">),</span>
+            <span class="n">X_ctrl</span><span class="o">=</span><span class="n">_get</span><span class="p">(</span><span class="n">adata_ctrl</span><span class="p">),</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Category bundles</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="c1">#: Mapping ``{metric_name: higher_is_better}`` consumed by</span>
+<span class="c1">#: ``aggregate_rank_percentile``. ``True`` = larger metric value is</span>
+<span class="c1">#: better; ``False`` = smaller is better.</span>
+<span class="n">HIGHER_IS_BETTER</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># statistical</span>
+    <span class="s2">&quot;r2&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;mse&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;energy_distance&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># biological</span>
+    <span class="s2">&quot;cellcycle_proportion_same_phase&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;coexpression&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;pathway&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;deg_dice_at_100&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;deg_logfc_spearman&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;cytokine&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="c1"># perturbational</span>
+    <span class="s2">&quot;knn_purity&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="compute_statistical_metrics">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.compute_statistical_metrics.html#sc_reconstruction.metrics.compute_statistical_metrics">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_statistical_metrics</span><span class="p">(</span>
+    <span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the statistical metrics on a (true, predicted) pair.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        Keys: ``r2``, ``mse``, ``energy_distance``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;r2&quot;</span><span class="p">:</span> <span class="n">metric_r2</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">),</span>
+        <span class="s2">&quot;mse&quot;</span><span class="p">:</span> <span class="n">metric_mse</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">),</span>
+        <span class="s2">&quot;energy_distance&quot;</span><span class="p">:</span> <span class="n">metric_energy_distance</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">),</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="compute_biological_metrics">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.compute_biological_metrics.html#sc_reconstruction.metrics.compute_biological_metrics">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_biological_metrics</span><span class="p">(</span>
+    <span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">s_genes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">g2m_genes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">geneset_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">progeny_model</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pathway_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">cytokine_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">deg_refs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">AnnData</span><span class="p">,</span> <span class="n">AnnData</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the biological metrics that have their required resources.</span>
+
+<span class="sd">    Each metric is skipped (and reported as ``NaN``) if the required resource</span>
+<span class="sd">    is missing — so the function is safe to call with whichever inputs the</span>
+<span class="sd">    user happens to have. A warning is emitted per skipped metric.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s_genes, g2m_genes</span>
+<span class="sd">        Required for ``cellcycle_*``.</span>
+<span class="sd">    geneset_dict</span>
+<span class="sd">        Required for ``coexpression``. If ``None``, the wrapper will try to</span>
+<span class="sd">        fetch MSigDB Hallmark via omnipath; pass explicitly to avoid network.</span>
+<span class="sd">    progeny_model, pathway_dict</span>
+<span class="sd">        Required for ``pathway``. If both ``None``, fetched via decoupler.</span>
+<span class="sd">    cytokine_dict</span>
+<span class="sd">        Required for ``cytokine``. No fetch fallback.</span>
+<span class="sd">    deg_refs</span>
+<span class="sd">        Optional ``(ref_true, ref_pred)`` AnnData pair for ``deg_*``.</span>
+<span class="sd">    min_cells</span>
+<span class="sd">        Minimum cells-per-gene cutoff forwarded to ``metric_cellcycle``,</span>
+<span class="sd">        ``metric_coexpression``, ``metric_pathway`` and ``metric_deg``.</span>
+<span class="sd">        Lower this on small test sets (e.g. 100-cell tutorial slices) where</span>
+<span class="sd">        the default of 20 would filter most cell-cycle / signature genes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Cell-cycle</span>
+    <span class="k">if</span> <span class="n">s_genes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">g2m_genes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cc</span> <span class="o">=</span> <span class="n">metric_cellcycle</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">,</span>
+                                  <span class="n">s_genes</span><span class="o">=</span><span class="n">s_genes</span><span class="p">,</span> <span class="n">g2m_genes</span><span class="o">=</span><span class="n">g2m_genes</span><span class="p">,</span>
+                                  <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;cellcycle_proportion_same_phase&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;proportion_same_phase&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cellcycle metric failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;cellcycle_proportion_same_phase&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;metric_cellcycle skipped: provide `s_genes` and `g2m_genes`.&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;cellcycle_proportion_same_phase&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Coexpression (auto-fetch if geneset_dict is None)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;coexpression&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_coexpression</span><span class="p">(</span>
+            <span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">,</span> <span class="n">geneset_dict</span><span class="o">=</span><span class="n">geneset_dict</span><span class="p">,</span>
+            <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;coexpression metric failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;coexpression&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Pathway (auto-fetch if progeny_model is None)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;pathway&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_pathway</span><span class="p">(</span>
+            <span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">,</span>
+            <span class="n">progeny_model</span><span class="o">=</span><span class="n">progeny_model</span><span class="p">,</span>
+            <span class="n">pathway_dict</span><span class="o">=</span><span class="n">pathway_dict</span><span class="p">,</span>
+            <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pathway metric failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;pathway&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+
+    <span class="c1"># DEG (requires a reference pair — typically control). We surface the</span>
+    <span class="c1"># &quot;pred_*&quot; variant because it uses the predicted reference (i.e. it is</span>
+    <span class="c1"># the realistic case where the user only has predictions to compare with).</span>
+    <span class="k">if</span> <span class="n">deg_refs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ref_true</span><span class="p">,</span> <span class="n">ref_pred</span> <span class="o">=</span> <span class="n">deg_refs</span>
+            <span class="n">deg</span> <span class="o">=</span> <span class="n">metric_deg</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">,</span>
+                             <span class="n">ref_true</span><span class="o">=</span><span class="n">ref_true</span><span class="p">,</span> <span class="n">ref_pred</span><span class="o">=</span><span class="n">ref_pred</span><span class="p">,</span>
+                             <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;deg_dice_at_100&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">deg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pred_deg_dice_100&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">))</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;deg_logfc_spearman&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">deg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pred_mean_genediff_spearman&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;deg metric failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;deg_dice_at_100&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;deg_logfc_spearman&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;deg_dice_at_100&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;deg_logfc_spearman&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Cytokine</span>
+    <span class="k">if</span> <span class="n">cytokine_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;cytokine&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric_cytokine</span><span class="p">(</span>
+                <span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">,</span> <span class="n">cytokine_dict</span><span class="o">=</span><span class="n">cytokine_dict</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cytokine metric failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="s2">&quot;cytokine&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="s2">&quot;cytokine&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+
+<div class="viewcode-block" id="compute_perturbational_metrics">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.compute_perturbational_metrics.html#sc_reconstruction.metrics.compute_perturbational_metrics">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_perturbational_metrics</span><span class="p">(</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pert_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_ctrl</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">use_rep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run perturbational metrics (currently KNN purity).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;knn_purity&quot;</span><span class="p">:</span> <span class="n">metric_knn_purity</span><span class="p">(</span>
+            <span class="n">adata_pred</span><span class="o">=</span><span class="n">adata_pred</span><span class="p">,</span>
+            <span class="n">adata_pert_true</span><span class="o">=</span><span class="n">adata_pert_true</span><span class="p">,</span>
+            <span class="n">adata_ctrl</span><span class="o">=</span><span class="n">adata_ctrl</span><span class="p">,</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+            <span class="n">use_rep</span><span class="o">=</span><span class="n">use_rep</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="compute_all_metrics">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.compute_all_metrics.html#sc_reconstruction.metrics.compute_all_metrics">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_all_metrics</span><span class="p">(</span>
+    <span class="n">adata_true</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="n">adata_pred</span><span class="p">:</span> <span class="n">AnnData</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="c1"># Stat</span>
+    <span class="c1"># Bio resources</span>
+    <span class="n">s_genes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">g2m_genes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">geneset_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">progeny_model</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pathway_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">cytokine_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">deg_refs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">AnnData</span><span class="p">,</span> <span class="n">AnnData</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_cells</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="c1"># Perturbational</span>
+    <span class="n">perturb</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">AnnData</span><span class="p">,</span> <span class="n">AnnData</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">knn_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="n">use_rep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run every metric for which the required inputs are available.</span>
+
+<span class="sd">    Returns one flat ``{metric_name: score}`` dict. Metrics whose required</span>
+<span class="sd">    inputs are missing are returned as ``NaN``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    perturb</span>
+<span class="sd">        ``(adata_pert_true, adata_ctrl)`` if KNN purity should be computed</span>
+<span class="sd">        against the predicted perturbation in ``adata_pred``.</span>
+<span class="sd">    min_cells</span>
+<span class="sd">        Minimum cells-per-gene cutoff forwarded to the biological metrics.</span>
+<span class="sd">        Lower this on small test sets (e.g. 100-cell tutorial slices) where</span>
+<span class="sd">        the default of 20 would filter most cell-cycle / signature genes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">scores</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">compute_statistical_metrics</span><span class="p">(</span><span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">))</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">compute_biological_metrics</span><span class="p">(</span>
+        <span class="n">adata_true</span><span class="p">,</span> <span class="n">adata_pred</span><span class="p">,</span>
+        <span class="n">s_genes</span><span class="o">=</span><span class="n">s_genes</span><span class="p">,</span> <span class="n">g2m_genes</span><span class="o">=</span><span class="n">g2m_genes</span><span class="p">,</span>
+        <span class="n">geneset_dict</span><span class="o">=</span><span class="n">geneset_dict</span><span class="p">,</span>
+        <span class="n">progeny_model</span><span class="o">=</span><span class="n">progeny_model</span><span class="p">,</span> <span class="n">pathway_dict</span><span class="o">=</span><span class="n">pathway_dict</span><span class="p">,</span>
+        <span class="n">cytokine_dict</span><span class="o">=</span><span class="n">cytokine_dict</span><span class="p">,</span> <span class="n">deg_refs</span><span class="o">=</span><span class="n">deg_refs</span><span class="p">,</span>
+        <span class="n">min_cells</span><span class="o">=</span><span class="n">min_cells</span><span class="p">,</span>
+    <span class="p">))</span>
+    <span class="k">if</span> <span class="n">perturb</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">adata_pert_true</span><span class="p">,</span> <span class="n">adata_ctrl</span> <span class="o">=</span> <span class="n">perturb</span>
+        <span class="n">scores</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">compute_perturbational_metrics</span><span class="p">(</span>
+            <span class="n">adata_pred</span><span class="o">=</span><span class="n">adata_pred</span><span class="p">,</span>
+            <span class="n">adata_pert_true</span><span class="o">=</span><span class="n">adata_pert_true</span><span class="p">,</span>
+            <span class="n">adata_ctrl</span><span class="o">=</span><span class="n">adata_ctrl</span><span class="p">,</span>
+            <span class="n">k</span><span class="o">=</span><span class="n">knn_k</span><span class="p">,</span> <span class="n">use_rep</span><span class="o">=</span><span class="n">use_rep</span><span class="p">,</span>
+        <span class="p">))</span>
+    <span class="k">return</span> <span class="n">scores</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Rank-percentile aggregation (paper formula)</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="aggregate_rank_percentile">
+<a class="viewcode-back" href="../../../api/_autosummary/sc_reconstruction.metrics.aggregate_rank_percentile.html#sc_reconstruction.metrics.aggregate_rank_percentile">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aggregate_rank_percentile</span><span class="p">(</span>
+    <span class="n">scores</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">higher_is_better</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert raw per-method, per-metric scores to rank-percentiles.</span>
+
+<span class="sd">    Implements the paper&#39;s formula::</span>
+
+<span class="sd">        rp_i(m) = (n - rank_i(m)) / (n - 1)</span>
+
+<span class="sd">    where ``n`` is the number of methods, ``rank 1`` is best, and the</span>
+<span class="sd">    output range is ``[0, 1]`` — best method gets 1.0, worst gets 0.0.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    scores</span>
+<span class="sd">        DataFrame indexed by method (rows) and metric names (columns).</span>
+<span class="sd">    higher_is_better</span>
+<span class="sd">        Mapping ``{metric_name: bool}`` for each column of ``scores``.</span>
+<span class="sd">        If ``None``, falls back to :data:`HIGHER_IS_BETTER`; missing keys</span>
+<span class="sd">        default to ``True``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        Same shape as input, values in ``[0, 1]``; per-column NaN for ties.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">higher_is_better</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">higher_is_better</span> <span class="o">=</span> <span class="n">HIGHER_IS_BETTER</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">scores</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">scores</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">M</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">valid</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">hib</span> <span class="o">=</span> <span class="n">higher_is_better</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">higher_is_better</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">True</span>
+        <span class="c1"># rank 1 = best: ascending=False for higher-is-better, ascending=True for lower</span>
+        <span class="n">ranks</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="p">(</span><span class="ow">not</span> <span class="n">hib</span><span class="p">))</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="n">ranks</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Theis Lab.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

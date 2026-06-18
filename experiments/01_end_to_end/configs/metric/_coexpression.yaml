@@ -1,0 +1,19 @@
+meta:
+  name: coexpression
+
+evaluator:
+  _target_: sc_reconstruction.metrics._coexpression.CoexpressionBatchEvaluator
+  _partial_: true
+  mode: decode
+  zarr_path: ${eval_path}
+  emb_zarr_path: ${emb_zarr_path}
+  overlap_threshold: 5
+  min_cells: 20
+  threshold: 0.0
+  correlation_measure:
+    - pearson
+    - spearman
+  max_cells: 1e5
+  split_key: ${split_key}
+  batch_size: 100
+  max_workers: 20

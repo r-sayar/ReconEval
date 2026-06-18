@@ -1,0 +1,25 @@
+meta:
+  name: decode_statistical
+
+projection_metrics:
+  - mmd_rbf
+  - energy_distance
+
+
+
+evaluator:
+  _target_: sc_reconstruction.metrics.evaluation.MetricsBatchEvaluator
+  _partial_: true
+  zarr_path: ${eval_path}
+  reference_batch: Krasnow_2020
+  input_key: scANVI
+  output_key: X
+  batch_size: 300
+  minibatch_size: 512
+  max_cells: 1e4
+  split_key:
+    - cell_type
+    - dataset
+    - None
+  max_workers: 18
+

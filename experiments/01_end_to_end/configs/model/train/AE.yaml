@@ -1,0 +1,51 @@
+# Training configuration for scVI model
+meta:
+  name: AE
+  note: Default
+
+model_args:
+  _target_: sc_reconstruction.models.reconae.ReconAE 
+  library_size_mode: "none"
+  input_dim: ${data.input_dim}
+  n_hidden: [1024]
+  n_latent: 100
+  distribution: normal
+  learning_rate: 1e-4
+  reduce_lr_on_plateau: True
+  lr_factor: 0.6
+  lr_patience: 3
+  lr_threshold: 5e-5
+  lr_min: 0.0 
+
+dm_args: ${data.model_specific.${model.meta.name}}
+
+save:
+  dir: ${weights.dir}
+  filename: ${trainer.max_epochs}_${model.model_args.n_hidden}_${model.model_args.n_latent}_${now:%Y%m%d}
+
+training:
+  callbacks:
+    - _target_: lightning.pytorch.callbacks.ModelCheckpoint
+      monitor: "val/loss_epoch"
+      filename: "{epoch:02d}-{val/loss_epoch:.4f}"
+      dirpath: ${model.save.dir}/${model.save.filename}
+      save_top_k: 1
+      mode: "min"
+      save_last: false
+      every_n_epochs: 1
+      verbose: true
+    - _target_: lightning.pytorch.callbacks.EarlyStopping
+      monitor: "val/loss_epoch"
+      min_delta: 5e-5
+      patience: 5
+      mode: "min"
+      verbose: true
+    - _target_: sc_reconstruction.dataloaders.datamodules.DatasetEpochCallback
+
+logging:
+  wandb:
+    _target_: lightning.pytorch.loggers.WandbLogger
+    project: sc_recon_${data.name}
+    group: ${model.meta.name}
+    name: ${data.name}_${split}_${model.meta.name}_${model.model_args.n_hidden}_${model.model_args.n_latent}_${now:%Y%m%d}
+    save_dir: ${logging.dir}

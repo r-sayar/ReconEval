@@ -1,0 +1,893 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Latent-shift reconstruction (perturbation prediction) &#8212; ReconEval</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=f3ae5b26" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+    <script src="../_static/documentation_options.js?v=6d92e2be"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/latent_shift';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API reference" href="../api/index.html" />
+    <link rel="prev" title="Foundation-model reconstruction" href="fm.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">ReconEval</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../experiments.html">
+    Experiments
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../reproducibility.html">
+    Reproducibility
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/theislab/ReconEval" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../experiments.html">
+    Experiments
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reproducibility.html">
+    Reproducibility
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../references.html">
+    References
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/theislab/ReconEval" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Computing the metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="end_to_end.html">End-to-end reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fm.html">Foundation-model reconstruction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Latent-shift reconstruction (perturbation prediction)</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Latent-shift reconstruction (perturbation prediction)</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="latent-shift-reconstruction-perturbation-prediction">
+<h1>Latent-shift reconstruction (perturbation prediction)<a class="headerlink" href="#latent-shift-reconstruction-perturbation-prediction" title="Link to this heading">#</a></h1>
+<p>Latent-shift reconstruction predicts the effect of a perturbation in <strong>embedding space</strong> and
+decodes back to gene expression. Two stages:</p>
+<ol class="arabic simple">
+<li><p><strong>Predict the perturbed embedding</strong> — a <em>conditional</em> model trained on
+<code class="docutils literal notranslate"><span class="pre">(control_embedding,</span> <span class="pre">perturbed_embedding,</span> <span class="pre">perturbation_descriptor)</span></code> triples. Same control +
+different perturbation should produce different predictions. The paper uses CellFlow
+(JAX flow matching) and STATE (PyTorch transformer over cell sets) for this step.</p></li>
+<li><p><strong>Decode</strong> — a frozen pretrained MLP decoder turns the predicted embedding back into gene
+expression. Same decoder as in <code class="docutils literal notranslate"><span class="pre">fm.ipynb</span></code>.</p></li>
+</ol>
+<section id="the-model-contract">
+<h2>The model contract<a class="headerlink" href="#the-model-contract" title="Link to this heading">#</a></h2>
+<p>A perturbation predictor needs two methods, both <strong>conditioned on a perturbation descriptor</strong>
+(e.g. an ESM2 cytokine embedding, a drug SMILES embedding, a sgRNA one-hot):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">train(ctrl_emb,</span> <span class="pre">pert_emb,</span> <span class="pre">pert_cov,</span> <span class="pre">...)</span></code> — fit on paired control/perturbed embeddings,
+one perturbation descriptor per pair.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">predict(ctrl_emb,</span> <span class="pre">pert_cov)</span> <span class="pre">-&gt;</span> <span class="pre">pred_emb</span></code> — given a held-out control and a perturbation
+descriptor, return the predicted perturbed embedding.</p></li>
+</ul>
+<p>Without the covariate the model can only learn one global shift — which is what an
+unconditional predictor would do.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># Prefer the public src over any pip-installed sc_reconstruction (which may</span>
+<span class="c1"># come from a stale private clone in the active env).</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;src&quot;</span><span class="p">))</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PerturbationPredictor</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimum interface for a latent-shift model in ReconEval.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctrl_emb</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pert_emb</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+              <span class="n">pert_cov</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctrl_emb</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="reference-implementation-conditional-mlp">
+<h2>Reference implementation: conditional MLP<a class="headerlink" href="#reference-implementation-conditional-mlp" title="Link to this heading">#</a></h2>
+<p>Concat <code class="docutils literal notranslate"><span class="pre">(ctrl_emb,</span> <span class="pre">pert_cov)</span></code>, pass through an MLP, output <code class="docutils literal notranslate"><span class="pre">pred_emb</span></code>. This is the smallest
+thing that satisfies the conditional Protocol. The paper alternatives below are listed but
+commented out — they live in their own envs and need 500 K-iter training to converge.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MLPPerturbationPredictor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conditional `(ctrl_emb, pert_cov) -&gt; pert_emb` MLP. Tiny stand-in for CellFlow/STATE.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cov_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_hidden</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">):</span>
+        <span class="n">in_dim</span> <span class="o">=</span> <span class="n">embed_dim</span> <span class="o">+</span> <span class="n">cov_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_dim</span><span class="p">,</span>    <span class="n">n_hidden</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_hidden</span><span class="p">,</span>  <span class="n">n_hidden</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">n_hidden</span><span class="p">,</span>  <span class="n">embed_dim</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_cat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">):</span>
+        <span class="n">ctrl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">cov</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">pert_cov</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">ctrl</span><span class="p">,</span> <span class="n">cov</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">pert_emb</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cat</span><span class="p">(</span><span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">pert_emb</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">opt</span>    <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+        <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+            <span class="n">perm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]</span>
+                <span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]),</span> <span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cat</span><span class="p">(</span><span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+
+<span class="c1"># --- the paper alternatives (each lives in its own conda env / repo): ---</span>
+<span class="c1">#</span>
+<span class="c1"># from cellflow.model import CellFlow</span>
+<span class="c1">#   # JAX flow matching, OT solver. Takes (adata, perturbation_covariates dict) — see</span>
+<span class="c1">#   # experiments/03_latent_shift/codes/train_cf.py for the full pipeline (ESM2 cytokine</span>
+<span class="c1">#   # embeddings, donor + cell_type covariates, ~500 K iters on GPU).</span>
+<span class="c1">#</span>
+<span class="c1"># from state.tx.models.state_transition import StateTransitionPerturbationModel</span>
+<span class="c1">#   # PyTorch transformer over cell sets (cell_set_len=512). Takes a frozen MLP</span>
+<span class="c1">#   # decoder injected via FrozenMLPDecoderAdapter — see</span>
+<span class="c1">#   # experiments/03_latent_shift/codes/train_st.py.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="synthetic-data-with-multiple-perturbations">
+<h2>Synthetic data with multiple perturbations<a class="headerlink" href="#synthetic-data-with-multiple-perturbations" title="Link to this heading">#</a></h2>
+<p>We synthesise five perturbations, each producing a different latent direction, with a small
+perturbation descriptor per condition (a 16-d vector standing in for ESM2 / drug embeddings).
+For the tutorial we split <strong>cells within each perturbation</strong> into train (80%) and test (20%):
+the model sees every perturbation during training, but is evaluated on held-out cells.</p>
+<blockquote>
+<div><p>The paper’s harder setup holds out <em>whole perturbations</em> — see
+<code class="docutils literal notranslate"><span class="pre">experiments/03_latent_shift/codes/eval_cf.py</span></code> for that pipeline. With only K=5 random
+covariates the conditional MLP cannot generalise to an unseen perturbation, so we use the
+cell-level split here to demonstrate the conditional mechanism working.</p>
+</div></blockquote>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">anndata</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnnData</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">embed_dim</span><span class="p">,</span> <span class="n">cov_dim</span><span class="p">,</span> <span class="n">n_genes</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">600</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mi">5</span>                     <span class="c1"># number of perturbations</span>
+<span class="n">n_per_pert</span> <span class="o">=</span> <span class="mi">500</span>          <span class="c1"># cells per perturbation</span>
+<span class="n">val_frac</span> <span class="o">=</span> <span class="mf">0.2</span>            <span class="c1"># 20% of each perturbation&#39;s cells held out</span>
+
+<span class="c1"># A descriptor per perturbation (random for tutorial; the paper uses ESM2 embeddings).</span>
+<span class="n">cov_book</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">cov_dim</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="c1"># Each perturbation&#39;s true effect: a linear function of its covariate so the model has</span>
+<span class="c1"># something learnable. shift_k = W @ cov_book[k]</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">cov_dim</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pair</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">ctrl</span>  <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">cov_book</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">@</span> <span class="n">W</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">pert</span>  <span class="o">=</span> <span class="n">ctrl</span> <span class="o">+</span> <span class="n">shift</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">ctrl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">cov</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">cov_book</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">cov_dim</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">ctrl</span><span class="p">,</span> <span class="n">pert</span><span class="p">,</span> <span class="n">cov</span>
+
+<span class="c1"># 80/20 split inside each perturbation: every pert is seen at training, evaluation uses</span>
+<span class="c1"># held-out cells of the same perts.</span>
+<span class="n">train_ctrl_l</span><span class="p">,</span> <span class="n">train_pert_l</span><span class="p">,</span> <span class="n">train_cov_l</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">test_ctrl_l</span><span class="p">,</span>  <span class="n">test_pert_l</span><span class="p">,</span>  <span class="n">test_cov_l</span>  <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">n_val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_per_pert</span> <span class="o">*</span> <span class="n">val_frac</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+    <span class="n">ctrl</span><span class="p">,</span> <span class="n">pert</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">_pair</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">n_per_pert</span><span class="p">)</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">n_per_pert</span><span class="p">)</span>
+    <span class="n">train_ctrl_l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ctrl</span><span class="p">[</span><span class="n">perm</span><span class="p">[</span><span class="n">n_val</span><span class="p">:]]);</span> <span class="n">train_pert_l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pert</span><span class="p">[</span><span class="n">perm</span><span class="p">[</span><span class="n">n_val</span><span class="p">:]]);</span> <span class="n">train_cov_l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">perm</span><span class="p">[</span><span class="n">n_val</span><span class="p">:]])</span>
+    <span class="n">test_ctrl_l</span> <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ctrl</span><span class="p">[</span><span class="n">perm</span><span class="p">[:</span><span class="n">n_val</span><span class="p">]]);</span>  <span class="n">test_pert_l</span> <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pert</span><span class="p">[</span><span class="n">perm</span><span class="p">[:</span><span class="n">n_val</span><span class="p">]]);</span>  <span class="n">test_cov_l</span> <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">perm</span><span class="p">[:</span><span class="n">n_val</span><span class="p">]])</span>
+
+<span class="n">train_ctrl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">train_ctrl_l</span><span class="p">);</span> <span class="n">train_pert</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">train_pert_l</span><span class="p">);</span> <span class="n">train_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">train_cov_l</span><span class="p">)</span>
+<span class="n">test_ctrl</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">test_ctrl_l</span><span class="p">);</span>  <span class="n">test_pert</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">test_pert_l</span><span class="p">);</span>  <span class="n">test_cov</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">test_cov_l</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;train: </span><span class="si">{</span><span class="n">train_ctrl</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> ctrl, </span><span class="si">{</span><span class="n">train_pert</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> pert, </span><span class="si">{</span><span class="n">train_cov</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> cov  (</span><span class="si">{</span><span class="n">K</span><span class="si">}</span><span class="s2"> perturbations)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;test : </span><span class="si">{</span><span class="n">test_ctrl</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> ctrl, </span><span class="si">{</span><span class="n">test_pert</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> pert, </span><span class="si">{</span><span class="n">test_cov</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> cov  (held-out cells)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>train: (2000, 128) ctrl, (2000, 128) pert, (2000, 16) cov  (5 perturbations)
+test : (500, 128) ctrl, (500, 128) pert, (500, 16) cov  (held-out cells)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="train-and-predict-the-held-out-perturbation">
+<h2>Train and predict the held-out perturbation<a class="headerlink" href="#train-and-predict-the-held-out-perturbation" title="Link to this heading">#</a></h2>
+<p>Same <code class="docutils literal notranslate"><span class="pre">.train(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">.predict(...)</span></code> shape any conditional predictor must expose.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred</span> <span class="o">=</span> <span class="n">MLPPerturbationPredictor</span><span class="p">(</span><span class="n">embed_dim</span><span class="o">=</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">cov_dim</span><span class="o">=</span><span class="n">cov_dim</span><span class="p">,</span> <span class="n">n_hidden</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">PerturbationPredictor</span><span class="p">)</span>
+
+<span class="n">pred</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_ctrl</span><span class="p">,</span> <span class="n">train_pert</span><span class="p">,</span> <span class="n">train_cov</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+
+<span class="n">pred_pert_emb</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_ctrl</span><span class="p">,</span> <span class="n">test_cov</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;held-out predicted embeddings: </span><span class="si">{</span><span class="n">pred_pert_emb</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>held-out predicted embeddings: (500, 128)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="decode-to-gene-space">
+<h2>Decode to gene space<a class="headerlink" href="#decode-to-gene-space" title="Link to this heading">#</a></h2>
+<p>Each embedding is mapped back to expression by a frozen pretrained decoder. The paper plugs in
+<code class="docutils literal notranslate"><span class="pre">FrozenMLPDecoderAdapter</span></code> from <code class="docutils literal notranslate"><span class="pre">sc_reconstruction.adapters.state_decoder_adapter</span></code> (the MLP
+decoder trained in <code class="docutils literal notranslate"><span class="pre">fm.ipynb</span></code>). For tutorial brevity we train a tiny MLP decoder on the same
+synthetic data so the gene-space numbers are meaningful.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A small MLP decoder: emb -&gt; expression. In the paper this is FrozenMLPDecoderAdapter loaded</span>
+<span class="c1"># from a pretrained MLP-decoder checkpoint produced by fm.ipynb (step 2).</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TinyDecoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emb_dim</span><span class="p">,</span> <span class="n">n_genes</span><span class="p">,</span> <span class="n">hidden</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">emb_dim</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden</span><span class="p">,</span>  <span class="n">n_genes</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>  <span class="c1"># ReLU = non-negative expression</span>
+        <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Build (emb, X) training pairs from the existing training data — control + perturbed both fine.</span>
+<span class="n">all_emb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">train_ctrl</span><span class="p">,</span> <span class="n">train_pert</span><span class="p">])</span>
+<span class="n">decoder_W_true</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">n_genes</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">all_X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">all_emb</span> <span class="o">@</span> <span class="n">decoder_W_true</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_emb</span><span class="p">),</span> <span class="n">n_genes</span><span class="p">)))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="n">dec</span> <span class="o">=</span> <span class="n">TinyDecoder</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">n_genes</span><span class="p">)</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">dec</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">all_emb</span><span class="p">);</span> <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">all_X</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">256</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">256</span><span class="p">]</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">();</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">dec</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]),</span> <span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span> <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">();</span> <span class="n">opt</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">decode</span><span class="p">(</span><span class="n">emb</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">dec</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">as_tensor</span><span class="p">(</span><span class="n">emb</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="c1"># Decode every relevant cell pool, wrap in AnnData.</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;G</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_genes</span><span class="p">)])</span>
+<span class="n">ctrl</span>      <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">decode</span><span class="p">(</span><span class="n">test_ctrl</span><span class="p">),</span>     <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+<span class="n">pert_true</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">decode</span><span class="p">(</span><span class="n">test_pert</span><span class="p">),</span>     <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+<span class="n">pert_pred</span> <span class="o">=</span> <span class="n">AnnData</span><span class="p">(</span><span class="n">decode</span><span class="p">(</span><span class="n">pred_pert_emb</span><span class="p">),</span> <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+
+<span class="c1"># Keep embeddings on .obsm so KNN purity runs in latent space.</span>
+<span class="n">ctrl</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_fm&quot;</span><span class="p">]</span>      <span class="o">=</span> <span class="n">test_ctrl</span>
+<span class="n">pert_true</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_fm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_pert</span>
+<span class="n">pert_pred</span><span class="o">.</span><span class="n">obsm</span><span class="p">[</span><span class="s2">&quot;X_fm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_pert_emb</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="score-the-held-out-cells">
+<h2>Score the held-out cells<a class="headerlink" href="#score-the-held-out-cells" title="Link to this heading">#</a></h2>
+<p><strong>KNN purity</strong> is the headline metric: of the predicted cell’s nearest neighbours in the pool
+<code class="docutils literal notranslate"><span class="pre">(true-perturbed</span> <span class="pre">∪</span> <span class="pre">control)</span></code>, how many are true-perturbed (1.0 = perfect; 0.5 = random;
+0.0 = lands in control). We measure it in latent space (<code class="docutils literal notranslate"><span class="pre">use_rep=&quot;X_fm&quot;</span></code>) because KNN in raw
+expression is dominated by mean/variance differences.</p>
+<p>The test cells were held out at training time, so this measures generalisation across cells of
+the same perturbations. The harder <em>held-out perturbation</em> test (paper setup) is referenced in
+the markdown above the synthetic-data cell.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sc_reconstruction.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">metric_knn_purity</span><span class="p">,</span> <span class="n">metric_r2</span><span class="p">,</span> <span class="n">metric_mse</span><span class="p">,</span> <span class="n">metric_energy_distance</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gene-space metrics (predicted held-out vs. true held-out):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  R^2              = </span><span class="si">{</span><span class="n">metric_r2</span><span class="p">(</span><span class="n">pert_true</span><span class="p">,</span><span class="w"> </span><span class="n">pert_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  MSE              = </span><span class="si">{</span><span class="n">metric_mse</span><span class="p">(</span><span class="n">pert_true</span><span class="p">,</span><span class="w"> </span><span class="n">pert_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Energy distance  = </span><span class="si">{</span><span class="n">metric_energy_distance</span><span class="p">(</span><span class="n">pert_true</span><span class="p">,</span><span class="w"> </span><span class="n">pert_pred</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">KNN purity (latent space — held-out cells):&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">metric_knn_purity</span><span class="p">(</span><span class="n">adata_pred</span><span class="o">=</span><span class="n">pert_pred</span><span class="p">,</span>
+                          <span class="n">adata_pert_true</span><span class="o">=</span><span class="n">pert_true</span><span class="p">,</span>
+                          <span class="n">adata_ctrl</span><span class="o">=</span><span class="n">ctrl</span><span class="p">,</span>
+                          <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">use_rep</span><span class="o">=</span><span class="s2">&quot;X_fm&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  k=</span><span class="si">{</span><span class="n">k</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gene-space metrics (predicted held-out vs. true held-out):
+  R^2              = 0.9798
+  MSE              = 0.0126
+  Energy distance  = 0.0384
+
+KNN purity (latent space — held-out cells):
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  k=10 : 0.9332
+  k=20 : 0.9615
+  k=50 : 0.9734
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="bringing-your-own-perturbation-predictor">
+<h2>Bringing your own perturbation predictor<a class="headerlink" href="#bringing-your-own-perturbation-predictor" title="Link to this heading">#</a></h2>
+<p>Any class with the two conditional methods slots in:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyPredictor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">pert_emb</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">MyPredictor</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">ctrl_emb</span><span class="p">,</span> <span class="n">pert_emb</span><span class="p">,</span> <span class="n">pert_cov</span><span class="p">)</span>
+<span class="n">pred_emb</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ctrl_test</span><span class="p">,</span> <span class="n">pert_cov_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the paper’s full pipelines see
+<code class="docutils literal notranslate"><span class="pre">experiments/03_latent_shift/codes/train_cf.py</span></code> and
+<code class="docutils literal notranslate"><span class="pre">experiments/03_latent_shift/codes/train_st.py</span></code>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="fm.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Foundation-model reconstruction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model-contract">The model contract</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-implementation-conditional-mlp">Reference implementation: conditional MLP</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synthetic-data-with-multiple-perturbations">Synthetic data with multiple perturbations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#train-and-predict-the-held-out-perturbation">Train and predict the held-out perturbation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decode-to-gene-space">Decode to gene space</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#score-the-held-out-cells">Score the held-out cells</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bringing-your-own-perturbation-predictor">Bringing your own perturbation predictor</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Theis Lab.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

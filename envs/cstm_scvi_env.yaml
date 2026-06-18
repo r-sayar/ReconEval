@@ -1,0 +1,52 @@
+name: reconeval
+channels:
+  - rapidsai
+  - nvidia
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.12
+  # Core scientific stack
+  - numpy=2.0.*
+  - pandas=2.2.*
+  - scipy=1.15.*
+  - scikit-learn=1.5.*
+  - matplotlib=3.10.*
+  - seaborn=0.13.*
+  - tqdm=4.67.*
+  - pyyaml=6.0.*
+  # Single-cell I/O + analysis
+  - anndata=0.12.*
+  - scanpy=1.11.*
+  - h5py=3.12.*
+  - zarr=2.18.*
+  - numcodecs=0.15.*
+  # GPU + dask (required by ReconPCA's LocalCUDACluster; drop if CPU-only)
+  - dask=2024.12.*
+  - dask-cuda=25.2.*
+  - cudf=25.2.*
+  - cuml=25.2.*
+  - cupy=13.4.*
+  - pynvml=12.0.*
+  # PyTorch + Lightning + scvi-tools
+  - pytorch=2.5.*
+  - pytorch-cuda=12.4
+  - lightning=2.5.*
+  - torchmetrics=1.6.*
+  - scvi-tools=1.3.*
+  # Hydra + logging
+  - hydra-core=1.3.*
+  - omegaconf=2.3.*
+  - wandb=0.19.*
+  # Metric resources (pathway / coexpression)
+  - pip
+  - pip:
+      - decoupler==2.1.1
+      - omnipath==1.0.12
+      - blitzgsea==1.3.54
+      - cellxgene-census==1.17.0
+      # STATE FM (foundation model embedder)
+      - arc-state==0.9.31
+      # Install the public ReconEval package itself in editable mode
+      - -e ..

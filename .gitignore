@@ -1,0 +1,45 @@
+.DS_Store
+.h5ad
+outputs/
+datasets/
+logs/
+src/sc_reconstruction/wandb/
+weights/
+results/
+multirun/
+test_notebooks
+*__pycache__/
+*.ipynb_checkpoints/
+src/sc_reconstruction/models/weights
+src/sc_reconstruction/weights/
+slurm_*.txt
+wandb/
+debug/
+raw_data/
+frozen/
+# Repo-root build/data dir only — DO NOT change to bare `sc_reconstruction/`
+# (that pattern also matches src/sc_reconstruction/ and silently un-tracks
+# package __init__.py files, which is what broke the metrics/models docs
+# pages on RTD).
+/sc_reconstruction/
+analysis/data/forzen/
+archive/
+runs/
+frozen
+
+# Slurm + smoke-test artefacts (compute-node stdout / stderr / per-driver logs)
+experiments/_smoke_logs/
+**/_smoke_logs/
+**/driver_logs/
+**/cf_smoke_*/
+**/st_smoke_*/
+*.out
+*.err
+slurm-*.out
+slurm_jupyter_*.txt
+slurm_error_*.txt
+**/logs/slurm/
+
+# Hydra job outputs (per-run `.hydra/` and local outputs/ written by drivers)
+**/.hydra/
+**/multirun/

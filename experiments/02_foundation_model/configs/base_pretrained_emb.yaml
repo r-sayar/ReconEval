@@ -1,0 +1,32 @@
+# configs/base_eval.yaml
+# @package _global_
+defaults:
+  - model: eval/AE
+  - data: pbmc
+  - _self_
+
+precision: high
+split: split02
+inference_kwargs:
+  n_samples: 1
+
+seed: 42
+latent_dim: 128
+dynamic_model_loading: true
+
+data_args:
+  split_meta_root: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/${split}/split_metadata.zarr"
+  comb_meta_root: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/comb_w_obs.zarr"
+  target_key: "val_combinations"
+  output_dir: "/lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc/${split}_${model.meta.name}_${latent_dim}.zarr"
+
+split_args:
+  seeds:
+    split01: 33
+    split02: 47
+    split03: 42
+  output_dir: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_scimilarity/ag
+  emb_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_scimilarity/scimilarity_emb.zarr
+  X_path: /lustre/groups/ml01/workspace/xiaotong.fu/data/reconstruction/pbmc_w_ag/comb_w_obs.zarr
+
+emb_key: scimilarity

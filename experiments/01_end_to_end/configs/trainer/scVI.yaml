@@ -1,0 +1,12 @@
+max_epochs: 100
+min_epochs: 30
+accelerator: auto
+devices: 1
+default_root_dir: ${model.save.dir}/${model.save.filename}
+enable_checkpointing: true
+checkpointing_monitor: 'reconstruction_loss_validation'
+early_stopping: true
+early_stopping_min_delta: 5
+early_stopping_patience: 5
+early_stopping_warmup_epochs: 5
+check_val_every_n_epoch: 1

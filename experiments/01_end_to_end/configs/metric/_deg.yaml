@@ -1,0 +1,30 @@
+meta:
+  name: deg
+
+deg:
+  methods:
+    - wilcoxon
+    - t-test
+  set_neg_to_zero: true
+
+evaluator:
+  _target_: sc_reconstruction.metrics._deg.DegBatchEvaluator
+  _partial_: true
+  mode: decode
+  zarr_path: ${eval_path}
+  emb_zarr_path: ${emb_zarr_path}
+  dice_k:
+    - 10
+    - 50
+    - 100
+    - 500
+  methods:
+    - wilcoxon
+    - t-test
+  min_cells: 20
+  set_neg_to_zero: true
+  dataset: ${data.name}
+  max_cells: 5e4
+  batch_size: 100
+  minibatch_size: 2_000
+  max_workers: 20
