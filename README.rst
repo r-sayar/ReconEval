@@ -138,7 +138,18 @@ Citation
 
 .. code-block:: text
 
-   TBD — will be added when the preprint is available.
+   @article{Fu2026.06.15.731445,
+	author = {Fu, Xiaotong and Klein, Dominik and Antipov, Egor and Palma, Alessandro and Tejada-Lapuerta, Alejandro and Bahrami, Mojtaba and K{\"u}mmerle, Louis B. and Lubetzki, Manuel and Casale, Francesco Paolo and Luecken, Malte D. and Theis, Fabian J.},
+	title = {Benchmarking gene expression reconstruction from single-cell latent representations},
+	elocation-id = {2026.06.15.731445},
+	year = {2026},
+	doi = {10.64898/2026.06.15.731445},
+	publisher = {Cold Spring Harbor Laboratory},
+	URL = {https://www.biorxiv.org/content/early/2026/06/18/2026.06.15.731445},
+	eprint = {https://www.biorxiv.org/content/early/2026/06/18/2026.06.15.731445.full.pdf},
+	journal = {bioRxiv}
+}
+
 
 License
 =======
