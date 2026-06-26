@@ -131,7 +131,7 @@ Data availability
 Paper
 =====
 
-Preprint: **TBD**
+Preprint: `available here! <https://www.biorxiv.org/content/early/2026/06/18/2026.06.15.731445>`_
 
 Citation
 ========
@@ -148,7 +148,7 @@ Citation
 	URL = {https://www.biorxiv.org/content/early/2026/06/18/2026.06.15.731445},
 	eprint = {https://www.biorxiv.org/content/early/2026/06/18/2026.06.15.731445.full.pdf},
 	journal = {bioRxiv}
-}
+	}
 
 
 License
