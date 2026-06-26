@@ -30,7 +30,7 @@ What ReconEval evaluates
 
 **Latent representations**
 
-* End-to-end: PCA, AE, scVI, nlscVI, mlscVI across latent dims ``{10, 32, 128, 512, 2048}`` and library size handling (None, Modeled, Observed).
+* End-to-end: PCA, AE, VAE across latent dims ``{10, 32, 128, 512, 2048}`` and library size handling (None, Modeled, Observed).
 * Foundation model embeddings: SE from STATE (2058-d), scGPT (512-d), scConcept (512-d),
   SCimilarity (128-d)
 

@@ -32,6 +32,13 @@ dependencies = [
     "pot",
     "zarr",
     "numcodecs",
+    "lightning",
+    "torch",
+    "scvi-tools",
+    "dask",
+    "omegaconf",
+    "geomloss",
+    "cupy-cuda12x",
 ]
 dynamic = ["version"]
 

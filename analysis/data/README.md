@@ -5,7 +5,7 @@ This folder contains the notebooks and helper scripts needed to reproduce the pa
 ## Layout
 
 - data/frozen/
-  - Place the frozen datasets and result tables here (downloaded from Zenodo or prepared locally).
+  - Place the frozen datasets and result tables here (downloaded from Hugging Face or prepared locally).
 - data/extract/
   - Scripts that generate the frozen datasets from full raw data.
 - data/plots/
