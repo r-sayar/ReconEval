@@ -1,0 +1,8 @@
+# Generated demo/benchmark artifacts — regenerated per run
+output/
+output.h5ad
+resources_test/
+target/
+work/
+.nextflow*
+__pycache__/

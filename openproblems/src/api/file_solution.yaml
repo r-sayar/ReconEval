@@ -1,0 +1,16 @@
+type: file
+example: "resources_test/reconeval/luca/solution.h5ad"
+label: "Solution"
+summary: "Ground-truth expression for held-out test cells."
+info:
+  format:
+    type: h5ad
+    uns:
+      - type: string
+        name: dataset_id
+        description: Unique dataset identifier
+        required: true
+      - type: string
+        name: normalization_id
+        description: Normalization applied to .X
+        required: true

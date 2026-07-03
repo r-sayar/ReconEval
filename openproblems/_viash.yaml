@@ -1,0 +1,56 @@
+viash_version: 0.9.4
+
+name: reconeval
+organization: openproblems-bio
+version: dev
+
+license: MIT
+keywords: [single-cell, openproblems, benchmark, reconstruction, reconeval, luca]
+links:
+  issue_tracker: https://github.com/r-sayar/ReconEval/issues
+  repository: https://github.com/r-sayar/ReconEval
+  docker_registry: ghcr.io
+
+label: Gene expression reconstruction
+summary: Benchmark metrics and methods for reconstructing gene expression from single-cell latent representations.
+description: |
+  ReconEval evaluates how well methods reconstruct gene expression from
+  single-cell data. This OpenProblems task provides Viash components for:
+
+  1. **Data processing** — normalize LuCA (Human Lung Cancer Cell Atlas) h5ad
+     data, select HVGs, and split train/test cells.
+  2. **Methods** — reconstruction models (PCA baseline, extensible to AE/scVI).
+  3. **Metrics** — ReconEval statistical, biological, and perturbational scores.
+
+  Dataset: `Human Lung Cancer Cell Atlas (LuCA)
+  <https://cellxgene.cziscience.com/collections/edb893ee-4066-4128-9aec-5eb2b03f8287>`_
+
+references:
+  doi:
+    - 10.64898/2026.06.15.731445
+
+info:
+  image: reconeval.svg
+  test_resources:
+    - type: s3
+      path: s3://openproblems-data/resources_test/common/
+      dest: resources_test/common
+    - path: /resources_test/reconeval/luca
+      dest: resources_test/reconeval/luca
+    - path: /resources_test/common/luca
+      dest: resources_test/common/luca
+
+authors:
+  - name: Theis Lab
+    roles: [author, maintainer]
+    info:
+      github: theislab
+
+config_mods: |
+  .runners[.type == "nextflow"].config.labels := { lowmem : "memory = 20.Gb", midmem : "memory = 50.Gb", highmem : "memory = 100.Gb", lowcpu : "cpus = 5", midcpu : "cpus = 15", highcpu : "cpus = 30", lowtime : "time = 1.h", midtime : "time = 4.h", hightime : "time = 8.h", veryhightime : "time = 24.h" }
+
+repositories:
+  - name: openproblems
+    type: github
+    repo: openproblems-bio/openproblems
+    tag: build/main

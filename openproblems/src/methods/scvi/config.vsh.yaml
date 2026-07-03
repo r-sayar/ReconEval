@@ -1,0 +1,48 @@
+__merge__: ../../api/comp_method.yaml
+name: scvi
+info:
+  preferred_normalization: counts
+  label: scVI
+  summary: scvi-tools SCVI reconstruction (denoised expression).
+  description: |
+    Trains an ``scvi-tools`` SCVI model on the training AnnData and returns
+    denoised (posterior mean) expression for the test cells via
+    ``get_normalized_expression``. Expects raw counts in ``.X`` (i.e. the
+    dataset was processed with ``preferred_normalization: counts``).
+arguments:
+  - name: "--n_latent"
+    type: integer
+    default: 10
+    description: Dimension of the SCVI latent space.
+  - name: "--n_hidden"
+    type: integer
+    default: 128
+    description: Hidden layer width.
+  - name: "--n_layers"
+    type: integer
+    default: 1
+    description: Number of hidden layers in encoder/decoder.
+  - name: "--max_epochs"
+    type: integer
+    default: 100
+    description: Maximum training epochs.
+  - name: "--seed"
+    type: integer
+    default: 0
+    description: Random seed.
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        pip:
+          - git+https://github.com/r-sayar/ReconEval.git
+          - scvi-tools>=1.1
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midtime, highmem, midcpu]

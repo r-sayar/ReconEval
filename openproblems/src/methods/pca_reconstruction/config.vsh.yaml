@@ -1,0 +1,31 @@
+__merge__: ../../api/comp_method.yaml
+name: pca_reconstruction
+info:
+  preferred_normalization: log1p_cp10k
+  label: PCA reconstruction
+  summary: Linear PCA encode/decode reconstruction.
+  description: |
+    Fits PCA on training cells and reconstructs test expression via
+    projection and inverse transform.
+arguments:
+  - name: "--n_components"
+    type: integer
+    default: 128
+    description: Number of principal components.
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        pip:
+          - git+https://github.com/r-sayar/ReconEval.git
+          - scikit-learn
+          - scanpy
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midtime, midmem, midcpu]

@@ -25,6 +25,27 @@ Documentation
 Full documentation, API reference and rendered tutorials at
 `reconeval.readthedocs.io <https://reconeval.readthedocs.io>`_.
 
+OpenProblems integration
+========================
+
+A full OpenProblems-style pipeline lives under ``openproblems/``:
+
+1. **Data processing** — ``data_processors/process_dataset`` (h5ad in → train/test/solution)
+2. **Methods** — ``methods/pca_reconstruction`` (h5ad-backed training via
+   ``H5adReconstructionDataModule``)
+3. **Metrics** — ReconEval statistical / biological / KNN purity Viash components
+4. **Workflows** — ``process_datasets`` and ``run_benchmark`` Nextflow pipelines
+
+LuCA demo (Human Lung Cancer Cell Atlas):
+
+.. code-block:: bash
+
+   pip install -r envs/requirements-min.txt && pip install -e .
+   python openproblems/scripts/run_demo_luca.py --fallback --n-cells 2000
+
+See ``openproblems/README.md`` for Viash/Nextflow usage and
+`OpenProblems metric docs <https://openproblems.bio/documentation/create_component/add_a_metric>`_.
+
 What ReconEval evaluates
 ========================
 

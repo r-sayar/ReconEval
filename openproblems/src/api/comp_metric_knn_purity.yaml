@@ -1,0 +1,63 @@
+namespace: "metrics"
+info:
+  type: metric
+  type_info:
+    label: Metric
+    summary: ReconEval KNN purity metric for perturbation reconstruction.
+    description: |
+      A perturbational metric that measures whether predicted perturbed cells
+      are closer to true perturbed cells than to control cells in expression
+      or latent space.
+arguments:
+  - name: "--input_prediction"
+    __merge__: file_prediction.yaml
+    direction: input
+    required: true
+    description: Predicted perturbed cells (the query set).
+  - name: "--input_solution_perturbed"
+    __merge__: file_solution.yaml
+    direction: input
+    required: true
+    description: Ground-truth perturbed cells (positive pool).
+  - name: "--input_solution_control"
+    __merge__: file_solution.yaml
+    direction: input
+    required: true
+    description: Ground-truth control cells (negative pool).
+  - name: "--output"
+    __merge__: file_score.yaml
+    direction: output
+    required: true
+  - name: "--prediction_layer"
+    type: string
+    direction: input
+    default: X
+    description: |
+      Where to read predicted expression: ``X`` for ``.X``, a layer name, or
+      an ``.obsm`` key when ``--use_rep`` is set.
+  - name: "--solution_layer"
+    type: string
+    direction: input
+    default: X
+    description: |
+      Where to read solution expression: ``X`` for ``.X``, a layer name, or
+      an ``.obsm`` key when ``--use_rep`` is set.
+  - name: "--use_rep"
+    type: string
+    direction: input
+    required: false
+    description: |
+      If set, use ``.obsm[use_rep]`` instead of expression layers for all
+      inputs. Recommended for latent-space perturbation scoring.
+  - name: "--k"
+    type: integer
+    direction: input
+    default: 20
+    description: Number of nearest neighbors for KNN purity.
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - type: python_script
+    path: /common/component_tests/check_config.py
+  - path: /resources_test/reconeval_demo
+    dest: resources_test/reconeval_demo

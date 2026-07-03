@@ -1,0 +1,31 @@
+namespace: "data_processors"
+info:
+  type: data_processor
+  type_info:
+    label: Data processor
+    summary: Process a common dataset into train/test/solution splits.
+    description: |
+      Normalizes expression, selects highly variable genes, and splits cells
+      into train and held-out test sets for gene-expression reconstruction.
+arguments:
+  - name: "--input"
+    __merge__: file_common_dataset.yaml
+    direction: input
+    required: true
+  - name: "--output_train"
+    __merge__: file_train.yaml
+    direction: output
+    required: true
+  - name: "--output_test"
+    __merge__: file_test.yaml
+    direction: output
+    required: true
+  - name: "--output_solution"
+    __merge__: file_solution.yaml
+    direction: output
+    required: true
+test_resources:
+  - path: /resources_test/common/luca
+    dest: resources_test/common/luca
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py

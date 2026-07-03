@@ -1,0 +1,194 @@
+__merge__: ../../api/comp_metric.yaml
+name: biological
+info:
+  metrics:
+    - name: cellcycle_proportion_same_phase
+      label: Cell-cycle phase agreement
+      summary: Fraction of cells assigned the same cell-cycle phase.
+      description: |
+        Compares cell-cycle phase labels derived from S and G2M gene scores
+        between solution and prediction.
+      min: 0
+      max: 1
+      maximize: true
+      references:
+        bibtex: |
+          @article{tirosh:16,
+            author = {Tirosh, Itay and Izar, Benjamin and Prakadan, Sanjay M. and others},
+            title = {Dissecting the multicellular ecosystem of metastatic melanoma by single-cell RNA-seq},
+            journal = {Science},
+            volume = {352},
+            pages = {189--196},
+            year = {2016}
+          }
+      links:
+        documentation: https://reconeval.readthedocs.io
+
+    - name: coexpression
+      label: Co-expression similarity
+      summary: Mean co-expression similarity over MSigDB Hallmark gene sets.
+      description: |
+        Compares co-expression structure within MSigDB Hallmark gene sets
+        between solution and prediction.
+      min: -1
+      max: 1
+      maximize: true
+      references:
+        bibtex: |
+          @article{subramanian:05,
+            author = {Subramanian, Aravind and Tamayo, Pablo and Mootha, Vamsi K. and others},
+            title = {Gene set enrichment analysis},
+            journal = {PNAS},
+            volume = {102},
+            pages = {15545--15550},
+            year = {2005}
+          }
+      links:
+        documentation: https://reconeval.readthedocs.io
+
+    - name: pathway
+      label: Pathway activity similarity
+      summary: Correlation of PROGENy ULM pathway activity scores.
+      description: |
+        Compares PROGENy pathway activity scores between solution and
+        prediction using decoupler.
+      min: -1
+      max: 1
+      maximize: true
+      references:
+        bibtex: |
+          @article{schubert:18,
+            author = {Schubert, Michael and others},
+            title = {Perturbation-response genes reveal signaling footprints in cancer gene expression},
+            journal = {Nature Communications},
+            year = {2018}
+          }
+      links:
+        documentation: https://reconeval.readthedocs.io
+
+    - name: deg_dice_at_100
+      label: DEG Dice@100
+      summary: Dice overlap of top-100 differentially expressed genes.
+      description: |
+        Overlap of the top 100 differentially expressed genes between
+        perturbed and reference conditions in solution vs prediction.
+      min: 0
+      max: 1
+      maximize: true
+      references:
+        bibtex: |
+          @article{Fu2026.06.15.731445,
+            author = {Fu, Xiaotong and Klein, Dominik and Antipov, Egor and others},
+            title = {Benchmarking gene expression reconstruction from single-cell latent representations},
+            year = {2026},
+            doi = {10.64898/2026.06.15.731445},
+            journal = {bioRxiv}
+          }
+      links:
+        documentation: https://reconeval.readthedocs.io
+
+    - name: deg_logfc_spearman
+      label: DEG logFC Spearman
+      summary: Spearman correlation of gene-wise log fold-changes.
+      description: |
+        Spearman correlation between gene-wise log fold-changes computed
+        relative to a reference condition.
+      min: -1
+      max: 1
+      maximize: true
+      references:
+        bibtex: |
+          @article{Fu2026.06.15.731445,
+            author = {Fu, Xiaotong and Klein, Dominik and Antipov, Egor and others},
+            title = {Benchmarking gene expression reconstruction from single-cell latent representations},
+            year = {2026},
+            doi = {10.64898/2026.06.15.731445},
+            journal = {bioRxiv}
+          }
+      links:
+        documentation: https://reconeval.readthedocs.io
+
+    - name: cytokine
+      label: Cytokine activity similarity
+      summary: Correlation of cytokine activity scores.
+      description: |
+        Compares cytokine activity scores derived from Immune Dictionary
+        signatures between solution and prediction.
+      min: -1
+      max: 1
+      maximize: true
+      references:
+        bibtex: |
+          @article{cui:24,
+            author = {Cui, Ang and others},
+            title = {Dictionary of immune responses to cytokines across cell types},
+            journal = {Nature},
+            year = {2024}
+          }
+      links:
+        documentation: https://reconeval.readthedocs.io
+
+arguments:
+  - name: "--cell_cycle_genes"
+    type: file
+    direction: input
+    default: resources/regev_lab_cell_cycle_genes.txt
+    description: Text file with S-phase then G2M-phase gene symbols.
+  - name: "--cytokine_signatures"
+    type: file
+    direction: input
+    required: false
+    description: |
+      Optional Immune Dictionary cytokine signature CSV. When omitted, the
+      cytokine metric is skipped.
+  - name: "--input_reference_solution"
+    __merge__: file_solution.yaml
+    direction: input
+    required: false
+    description: Reference (e.g. control) ground truth for DEG metrics.
+  - name: "--input_reference_prediction"
+    __merge__: file_prediction.yaml
+    direction: input
+    required: false
+    description: Reference (e.g. control) prediction for DEG metrics.
+  - name: "--reference_solution_layer"
+    type: string
+    direction: input
+    default: X
+    description: Layer for the reference solution AnnData.
+  - name: "--reference_prediction_layer"
+    type: string
+    direction: input
+    default: X
+    description: Layer for the reference prediction AnnData.
+  - name: "--min_cells"
+    type: integer
+    direction: input
+    default: 20
+    description: Minimum cells per gene for biological metrics.
+
+resources:
+  - type: python_script
+    path: script.py
+  - type: file
+    path: ../../common/openproblems_utils.py
+  - type: file
+    path: resources/regev_lab_cell_cycle_genes.txt
+    dest: resources/regev_lab_cell_cycle_genes.txt
+
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        pip:
+          - git+https://github.com/r-sayar/ReconEval.git
+          - decoupler>=2.1
+          - omnipath>=1.0
+          - blitzgsea>=1.3
+
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midtime, highmem, midcpu]

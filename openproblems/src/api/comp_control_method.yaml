@@ -1,0 +1,31 @@
+namespace: "control_methods"
+info:
+  type: control_method
+  type_info:
+    label: Control method
+    summary: A control method for sanity-checking the benchmark pipeline.
+    description: |
+      A control method that copies ground-truth expression into the
+      prediction slot to validate metric components.
+arguments:
+  - name: --input_train
+    __merge__: file_train.yaml
+    required: true
+    direction: input
+  - name: "--input_test"
+    __merge__: file_test.yaml
+    direction: input
+    required: true
+  - name: "--input_solution"
+    __merge__: file_solution.yaml
+    direction: input
+    required: true
+  - name: --output
+    __merge__: file_prediction.yaml
+    required: true
+    direction: output
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - path: /resources_test/reconeval/luca
+    dest: resources_test/reconeval/luca

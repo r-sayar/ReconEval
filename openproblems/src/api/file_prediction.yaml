@@ -1,0 +1,20 @@
+type: file
+example: "resources_test/reconeval_demo/prediction.h5ad"
+label: "Predicted data"
+summary: "Reconstructed gene expression as output by a method."
+info:
+  format:
+    type: h5ad
+    uns:
+      - type: string
+        name: dataset_id
+        description: "A unique identifier for the dataset"
+        required: true
+      - type: string
+        name: normalization_id
+        description: "Which normalization was used"
+        required: true
+      - type: string
+        name: method_id
+        description: "A unique identifier for the method"
+        required: true

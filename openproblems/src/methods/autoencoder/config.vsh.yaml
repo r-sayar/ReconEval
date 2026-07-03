@@ -1,0 +1,56 @@
+__merge__: ../../api/comp_method.yaml
+name: autoencoder
+info:
+  preferred_normalization: log1p_cp10k
+  label: Autoencoder
+  summary: Fully-connected autoencoder reconstruction.
+  description: |
+    Trains a symmetric fully-connected autoencoder on training cells and
+    reconstructs test expression by encoding then decoding. Uses the
+    ReconEval h5ad datamodule for loading and a compact PyTorch training
+    loop (no Lightning) so the container stays small.
+arguments:
+  - name: "--n_latent"
+    type: integer
+    default: 32
+    description: Dimension of the latent bottleneck.
+  - name: "--n_hidden"
+    type: integer
+    default: 256
+    description: Width of each hidden layer.
+  - name: "--n_layers"
+    type: integer
+    default: 2
+    description: Number of hidden layers on the encoder (mirrored in decoder).
+  - name: "--epochs"
+    type: integer
+    default: 40
+    description: Training epochs.
+  - name: "--batch_size"
+    type: integer
+    default: 256
+    description: Mini-batch size.
+  - name: "--learning_rate"
+    type: double
+    default: 0.001
+    description: Adam learning rate.
+  - name: "--seed"
+    type: integer
+    default: 0
+    description: Random seed.
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        pip:
+          - git+https://github.com/r-sayar/ReconEval.git
+          - torch
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midtime, midmem, midcpu]

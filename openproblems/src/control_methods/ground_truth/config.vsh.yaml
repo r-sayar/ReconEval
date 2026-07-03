@@ -1,0 +1,20 @@
+__merge__: ../../api/comp_control_method.yaml
+name: ground_truth
+info:
+  preferred_normalization: log1p_cp10k
+  label: Ground truth
+  summary: Copies solution expression (metric sanity check).
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        packages: [anndata]
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [lowtime, lowmem, lowcpu]

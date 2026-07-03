@@ -532,3 +532,8 @@ class SubsetDaskDecodeOnlyDataModule(DaskDecodeOnlyDataModule):
             self.n_vars = len(self.target_feature_indices)
             print(f"\nFeature subsetting applied:")
             print(f"  Using {self.n_vars} features from original {self.train_data.shape[1]}")
+
+
+# H5adReconstructionDataModule lives in ``h5ad_datamodule.py`` — kept out of
+# this module so it can be imported without the Dask/Zarr/Lightning/omegaconf
+# stack that the Zarr classes above require.

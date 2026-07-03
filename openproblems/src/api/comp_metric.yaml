@@ -1,0 +1,50 @@
+namespace: "metrics"
+info:
+  type: metric
+  type_info:
+    label: Metric
+    summary: A ReconEval gene-expression reconstruction metric.
+    description: |
+      A metric that compares predicted reconstructed gene expression to the
+      ground-truth solution using the ReconEval benchmark suite.
+arguments:
+  - name: "--input_solution"
+    __merge__: file_solution.yaml
+    direction: input
+    required: true
+  - name: "--input_prediction"
+    __merge__: file_prediction.yaml
+    direction: input
+    required: true
+  - name: "--output"
+    __merge__: file_score.yaml
+    direction: output
+    required: true
+  - name: "--solution_layer"
+    type: string
+    direction: input
+    default: X
+    description: |
+      Where to read ground-truth expression: ``X`` for ``.X``, or the name of
+      an ``.layers`` entry.
+  - name: "--prediction_layer"
+    type: string
+    direction: input
+    default: X
+    description: |
+      Where to read predicted expression: ``X`` for ``.X``, or the name of
+      an ``.layers`` entry.
+  - name: "--resolve_genes"
+    type: string
+    direction: input
+    default: intersection
+    choices: [solution, intersection]
+    description: |
+      How to resolve differences in genes between solution and prediction.
+test_resources:
+  - type: python_script
+    path: /common/component_tests/run_and_check_output.py
+  - type: python_script
+    path: /common/component_tests/check_config.py
+  - path: /resources_test/reconeval/luca
+    dest: resources_test/reconeval/luca

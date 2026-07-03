@@ -1,0 +1,44 @@
+__merge__: ../../api/comp_data_processor.yaml
+name: process_dataset
+info:
+  preferred_normalization: log1p_cp10k
+arguments:
+  - name: "--method"
+    type: string
+    description: Train/test split strategy.
+    choices: [random, origin]
+    default: random
+  - name: "--n_hvg"
+    type: integer
+    description: Number of highly variable genes to retain.
+    default: 2000
+  - name: "--test_fraction"
+    type: double
+    description: Fraction of cells assigned to the test set (random split).
+    default: 0.2
+  - name: "--obs_origin"
+    type: string
+    description: .obs column used for origin-based splits.
+    default: origin
+  - name: "--test_origin"
+    type: string
+    description: Origin label held out for testing when method=origin.
+    default: tumor_primary
+  - name: "--seed"
+    type: integer
+    description: Random seed for splitting and HVG selection.
+    default: 0
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        packages: [scanpy, anndata, scikit-learn]
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [highmem, midcpu, midtime]

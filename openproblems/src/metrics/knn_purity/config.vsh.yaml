@@ -1,0 +1,45 @@
+__merge__: ../../api/comp_metric_knn_purity.yaml
+name: knn_purity
+info:
+  metrics:
+    - name: knn_purity
+      label: KNN purity
+      summary: Fraction of k nearest neighbors that are true-perturbed cells.
+      description: |
+        Measures whether predicted perturbed cells are closer to true
+        perturbed cells than to control cells. A score of 1.0 means all
+        neighbors are true-perturbed; 0.5 is the random baseline.
+      min: 0
+      max: 1
+      maximize: true
+      references:
+        bibtex: |
+          @article{Fu2026.06.15.731445,
+            author = {Fu, Xiaotong and Klein, Dominik and Antipov, Egor and others},
+            title = {Benchmarking gene expression reconstruction from single-cell latent representations},
+            year = {2026},
+            doi = {10.64898/2026.06.15.731445},
+            journal = {bioRxiv}
+          }
+      links:
+        documentation: https://reconeval.readthedocs.io
+
+resources:
+  - type: python_script
+    path: script.py
+  - type: file
+    path: ../../common/openproblems_utils.py
+
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        pip:
+          - git+https://github.com/r-sayar/ReconEval.git
+
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [midtime, midmem, midcpu]
