@@ -41,6 +41,9 @@ def _try_import(modname: str, attr: str) -> None:
         )
 
 
+# Negative control — no dependencies beyond numpy, always importable.
+_try_import("reconnegctrl", "ReconNegativeControl")
+
 # End-to-end models — guarded so the package stays importable in any env.
 _try_import("reconpca", "ReconPCA")
 _try_import("reconae", "ReconAE")
