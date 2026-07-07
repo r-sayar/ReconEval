@@ -107,6 +107,34 @@ def run_pca_method(
     out.write_h5ad(output_path, compression="gzip")
 
 
+def run_negative_control(
+    train_path: Path,
+    test_path: Path,
+    output_path: Path,
+) -> None:
+    print(">> negative_control", flush=True)
+    train = ad.read_h5ad(train_path)
+    test = ad.read_h5ad(test_path)
+    x_train = _dense(train.X).astype(np.float32)
+    train_mean = x_train.mean(axis=0)
+    x_pred = np.broadcast_to(train_mean, (test.n_obs, len(train_mean))).copy()
+
+    out = ad.AnnData(
+        X=x_pred.astype(np.float32),
+        obs=test.obs.copy(),
+        var=test.var.copy(),
+        uns={
+            "dataset_id": train.uns["dataset_id"],
+            "normalization_id": train.uns["normalization_id"],
+            "method_id": "negative_control",
+        },
+    )
+    out.obs_names = test.obs_names
+    out.var_names = test.var_names
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    out.write_h5ad(output_path, compression="gzip")
+
+
 def run_metrics(solution_path: Path, prediction_path: Path, output_path: Path) -> dict:
     print(">> statistical metrics", flush=True)
     solution = ad.read_h5ad(solution_path)
@@ -157,6 +185,17 @@ def main() -> None:
         TASK / "test.h5ad",
         TASK / "solution.h5ad",
     )
+    run_negative_control(
+        TASK / "train.h5ad",
+        TASK / "test.h5ad",
+        TASK / "negctrl_prediction.h5ad",
+    )
+    negctrl_scores = run_metrics(
+        TASK / "solution.h5ad",
+        TASK / "negctrl_prediction.h5ad",
+        OUTPUT / "negctrl_score.h5ad",
+    )
+
     run_pca_method(
         TASK / "train.h5ad",
         TASK / "test.h5ad",
@@ -168,10 +207,19 @@ def main() -> None:
         OUTPUT / "score.h5ad",
     )
 
-    print("\n=== LuCA demo results (pca_reconstruction) ===", flush=True)
-    for name, value in scores.items():
-        print(f"  {name}: {value:.4f}", flush=True)
-    print(f"\nArtifacts: {TASK}  |  {OUTPUT / 'score.h5ad'}", flush=True)
+    print("\n=== LuCA demo results ===", flush=True)
+    all_results = {
+        "negative_control": negctrl_scores,
+        "pca_reconstruction": scores,
+    }
+    header = f"  {'metric':<30}" + "".join(f"{m:>20}" for m in all_results)
+    print(header, flush=True)
+    for metric in list(negctrl_scores.keys()):
+        row = f"  {metric:<30}" + "".join(
+            f"{all_results[m].get(metric, float('nan')):>20.4f}" for m in all_results
+        )
+        print(row, flush=True)
+    print(f"\nArtifacts: {TASK}  |  {OUTPUT}", flush=True)
 
 
 if __name__ == "__main__":

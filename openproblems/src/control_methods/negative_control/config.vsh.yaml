@@ -1,0 +1,25 @@
+__merge__: ../../api/comp_control_method.yaml
+name: negative_control
+info:
+  preferred_normalization: log1p_cp10k
+  label: Negative control (training mean)
+  summary: Predicts the gene-wise training mean for every test cell.
+  description: |
+    Broadcasts the mean expression vector computed from training cells as the
+    prediction for every test cell, completely ignoring test-cell identity.
+    Any method that genuinely captures cell-state information should score
+    strictly above this baseline on all metrics.
+resources:
+  - type: python_script
+    path: script.py
+engines:
+  - type: docker
+    image: openproblems/base_python:1
+    setup:
+      - type: python
+        packages: [anndata, numpy]
+runners:
+  - type: executable
+  - type: nextflow
+    directives:
+      label: [lowtime, lowmem, lowcpu]
