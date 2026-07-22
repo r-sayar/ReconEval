@@ -38,11 +38,14 @@ dependencies = [
     "dask",
     "omegaconf",
     "geomloss",
-    "cupy-cuda12x",
 ]
 dynamic = ["version"]
 
 [project.optional-dependencies]
+# GPU-only acceleration (RAPIDS/CUDA). Not installable on CPU-only hosts,
+# so it is an opt-in extra rather than a core dependency; this keeps
+# `pip install .` (and the OpenProblems Docker images) working on CPU.
+gpu = ["cupy-cuda12x"]
 docs = [
     "sphinx>=7",
     "pydata-sphinx-theme>=0.15",
