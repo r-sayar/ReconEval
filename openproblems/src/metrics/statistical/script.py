@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -11,6 +12,11 @@ if _repo_src.is_dir() and str(_repo_src) not in sys.path:
 _common_dir = Path(__file__).resolve().parents[2] / "common"
 if str(_common_dir) not in sys.path:
     sys.path.insert(0, str(_common_dir))
+
+# Viash runtime stages resources (openproblems_utils.py) under this dir.
+_res_dir = os.environ.get("VIASH_META_RESOURCES_DIR")
+if _res_dir and Path(_res_dir).is_dir() and _res_dir not in sys.path:
+    sys.path.insert(0, _res_dir)
 
 from openproblems_utils import align_genes, read_expression, write_score  # noqa: E402
 from sc_reconstruction.metrics import compute_statistical_metrics  # noqa: E402
