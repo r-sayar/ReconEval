@@ -10,16 +10,6 @@ _repo_src = Path(__file__).resolve().parents[4] / "src"
 if _repo_src.is_dir() and str(_repo_src) not in sys.path:
     sys.path.insert(0, str(_repo_src))
 
-_common_dir = Path(__file__).resolve().parents[2] / "common"
-if str(_common_dir) not in sys.path:
-    sys.path.insert(0, str(_common_dir))
-
-# Viash runtime stages resources (openproblems_utils.py) under this dir.
-_res_dir = os.environ.get("VIASH_META_RESOURCES_DIR")
-if _res_dir and Path(_res_dir).is_dir() and _res_dir not in sys.path:
-    sys.path.insert(0, _res_dir)
-
-from openproblems_utils import align_genes, read_expression, write_score  # noqa: E402
 from sc_reconstruction.metrics import (  # noqa: E402
     compute_biological_metrics,
     load_cell_cycle_genes,
@@ -44,6 +34,30 @@ par = {
 }
 meta = {"name": "biological"}
 ## VIASH END
+
+# Resources (openproblems_utils.py and resources/…) are staged in
+# meta["resources_dir"] at runtime — both viash runners inject `meta`, but only
+# the nextflow runner also exports the env var, so rely on meta here. Fall back
+# to the local checkout for direct `python script.py` execution.
+_res_dir = meta.get("resources_dir") or str(Path(__file__).resolve().parents[2] / "common")
+if _res_dir not in sys.path:
+    sys.path.insert(0, _res_dir)
+
+from openproblems_utils import align_genes, read_expression, write_score  # noqa: E402
+
+# Default cell_cycle_genes to the bundled regev_lab list under resources_dir when
+# not provided (a file-type default in the config would fail viash's up-front
+# existence check on the relative path).
+_ccg = par.get("cell_cycle_genes")
+if not _ccg:
+    _ccg = os.path.join(
+        meta.get("resources_dir", "."), "resources", "regev_lab_cell_cycle_genes.txt"
+    )
+elif not os.path.exists(_ccg) and meta.get("resources_dir"):
+    _cand = os.path.join(meta["resources_dir"], _ccg)
+    if os.path.exists(_cand):
+        _ccg = _cand
+par["cell_cycle_genes"] = _ccg
 
 print("Reading input files", flush=True)
 solution = read_expression(ad.read_h5ad(par["input_solution"]), par["solution_layer"])

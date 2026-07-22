@@ -132,8 +132,10 @@ arguments:
   - name: "--cell_cycle_genes"
     type: file
     direction: input
-    default: resources/regev_lab_cell_cycle_genes.txt
-    description: Text file with S-phase then G2M-phase gene symbols.
+    required: false
+    description: |
+      Text file with S-phase then G2M-phase gene symbols. When omitted, the
+      bundled regev_lab list under the component's resources is used.
   - name: "--cytokine_signatures"
     type: file
     direction: input
