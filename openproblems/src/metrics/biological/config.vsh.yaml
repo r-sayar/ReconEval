@@ -142,12 +142,12 @@ arguments:
       Optional Immune Dictionary cytokine signature CSV. When omitted, the
       cytokine metric is skipped.
   - name: "--input_reference_solution"
-    __merge__: file_solution.yaml
+    __merge__: ../../api/file_solution.yaml
     direction: input
     required: false
     description: Reference (e.g. control) ground truth for DEG metrics.
   - name: "--input_reference_prediction"
-    __merge__: file_prediction.yaml
+    __merge__: ../../api/file_prediction.yaml
     direction: input
     required: false
     description: Reference (e.g. control) prediction for DEG metrics.
