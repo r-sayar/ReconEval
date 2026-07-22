@@ -19,12 +19,6 @@ meta = {"name": "process_dataset"}
 ## VIASH END
 
 
-def _as_dense(x):
-    if hasattr(x, "toarray"):
-        return np.asarray(x.toarray())
-    return np.asarray(x)
-
-
 print(">> Load data", flush=True)
 adata = ad.read_h5ad(par["input"])
 print("input:", adata, flush=True)
@@ -44,7 +38,8 @@ print(f">> Select top {par['n_hvg']} HVGs", flush=True)
 sc.pp.highly_variable_genes(
     adata,
     n_top_genes=min(int(par["n_hvg"]), adata.n_vars - 1),
-    flavor="seurat_v3" if _as_dense(adata.X).min() >= 0 else "seurat",
+    # sparse-aware min: densifying the full matrix here OOMs on large inputs
+    flavor="seurat_v3" if adata.X.min() >= 0 else "seurat",
     subset=True,
 )
 
