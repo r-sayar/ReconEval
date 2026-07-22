@@ -32,16 +32,16 @@ dependencies = [
     "pot",
     "zarr",
     "numcodecs",
-    "lightning",
-    "torch",
-    "scvi-tools",
-    "dask",
     "omegaconf",
-    "geomloss",
 ]
 dynamic = ["version"]
 
 [project.optional-dependencies]
+# Deep-learning stack (torch etc.). Kept out of core so lightweight consumers
+# — e.g. the OpenProblems metric/PCA Docker images — install a small, fast
+# footprint. The dataloaders/models already guard these imports at runtime.
+# Components that need them (autoencoder, scvi) install them explicitly.
+dl = ["torch", "lightning", "scvi-tools", "dask", "geomloss"]
 # GPU-only acceleration (RAPIDS/CUDA). Not installable on CPU-only hosts,
 # so it is an opt-in extra rather than a core dependency; this keeps
 # `pip install .` (and the OpenProblems Docker images) working on CPU.
