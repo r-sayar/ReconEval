@@ -60,30 +60,51 @@ LuCA collection:
 
 ## Full OpenProblems workflow (Viash + Nextflow)
 
+Requires Viash 0.9.4, Nextflow, and Docker. The Docker images `pip install`
+ReconEval from `github.com/r-sayar/ReconEval`, so build from a clone of that
+repo. Three settings below are **required** and easy to miss — see the notes.
+
 ```bash
 cd openproblems
 
-# Download LuCA subset
-python scripts/download_luca.py
+# 1. Download a LuCA subset from CZ CELLxGENE Census (memory-safe sampling)
+python scripts/download_luca.py --n-cells 20000 \
+  --output resources_test/common/luca/dataset.h5ad
 
-# Build all components (requires Viash + Docker)
-viash ns build --parallel --setup cachedbuild
+# 2. Build all components (Docker images + Nextflow modules)
+viash ns build --setup cachedbuild
 
-# Process dataset
-viash run src/data_processors/process_dataset/config.vsh.yaml -- \
-  --input resources_test/common/luca/dataset.h5ad \
-  --output_train resources_test/reconeval/luca/train.h5ad \
-  --output_test resources_test/reconeval/luca/test.h5ad \
+# 3. Split into train/test/solution
+target/executable/data_processors/process_dataset/process_dataset \
+  --input resources_test/common/luca/dataset.h5ad --n_hvg 2000 \
+  --output_train    resources_test/reconeval/luca/train.h5ad \
+  --output_test     resources_test/reconeval/luca/test.h5ad \
   --output_solution resources_test/reconeval/luca/solution.h5ad
 
-# Run benchmark workflow
-nextflow run . \
+# 4. The workflow needs this shared OpenProblems util image (not built by ns build)
+docker pull ghcr.io/openproblems-bio/openproblems/utils/extract_uns_metadata:build_main
+
+# 5. Run the benchmark. NXF_VER pins a compatible Nextflow; add `laptop` to the
+#    profile on a small machine (see notes).
+NXF_VER=24.10.5 nextflow run . \
   -main-script target/nextflow/workflows/run_benchmark/main.nf \
-  -profile docker \
-  --input_train resources_test/reconeval/luca/train.h5ad \
-  --input_test resources_test/reconeval/luca/test.h5ad \
-  --input_solution resources_test/reconeval/luca/solution.h5ad
+  -profile docker,laptop --id luca \
+  --input_train    resources_test/reconeval/luca/train.h5ad \
+  --input_test     resources_test/reconeval/luca/test.h5ad \
+  --input_solution resources_test/reconeval/luca/solution.h5ad \
+  --output_scores score_uns.yaml --publish_dir output/luca
+# Scores: output/luca/score_uns.yaml
 ```
+
+**Required-but-easy-to-miss settings**
+
+- **`NXF_VER=24.10.5`** — Nextflow 26.x rejects the Viash-generated config
+  (`tempDir` is undefined); pin a 24.10.x runtime.
+- **`-profile docker,laptop`** — component labels request HPC-sized resources
+  (up to 30 CPU / 100 GB). On a workstation the `laptop` profile (in
+  `nextflow.config`) clamps them; omit it on an HPC node with enough resources.
+- **`docker pull …/extract_uns_metadata:build_main`** — a remote OpenProblems
+  dependency image the workflow uses but `viash ns build` does not fetch.
 
 ## h5ad dataloader
 

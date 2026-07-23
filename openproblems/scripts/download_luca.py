@@ -27,14 +27,32 @@ def download_from_census(
 
     print(f"Opening CELLxGENE Census ({census_version})...", flush=True)
     with cellxgene_census.open_soma(census_version=census_version) as census:
-        print(f"Querying LuCA dataset {LUCA_DATASET_ID}...", flush=True)
+        # Memory-safe sampling: read only the soma_joinids for LuCA (lightweight),
+        # sample from them, and then pull expression for the sampled cells via
+        # obs_coords. Pulling all ~892k LuCA cells into host RAM before
+        # subsampling OOMs small machines.
+        # LuCA is an aggregated atlas -- every cell has is_primary_data==False
+        # (primary records live under constituent datasets) -- so we filter on
+        # dataset_id only.
+        print(f"Listing LuCA cells (dataset {LUCA_DATASET_ID})...", flush=True)
+        obs = (
+            census["census_data"]["homo_sapiens"]
+            .obs.read(
+                value_filter=f"dataset_id == '{LUCA_DATASET_ID}'",
+                column_names=["soma_joinid"],
+            )
+            .concat()
+            .to_pandas()
+        )
+        ids = obs["soma_joinid"].to_numpy()
+        n_keep = min(n_cells, len(ids))
+        print(f"LuCA has {len(ids)} cells; sampling {n_keep}...", flush=True)
+        rng = np.random.default_rng(seed)
+        coords = np.sort(rng.choice(ids, size=n_keep, replace=False)).tolist()
         adata = cellxgene_census.get_anndata(
             census=census,
             organism="Homo sapiens",
-            # LuCA is an aggregated atlas -- every cell has is_primary_data==False
-            # (primary records live under the constituent datasets), so we do not
-            # apply the is_primary_data filter here.
-            obs_value_filter=f"dataset_id == '{LUCA_DATASET_ID}'",
+            obs_coords=coords,
             obs_column_names=[
                 "cell_type",
                 "dataset_id",
@@ -48,11 +66,6 @@ def download_from_census(
         )
 
     print(f"Downloaded {adata.n_obs} cells x {adata.n_vars} genes", flush=True)
-    if adata.n_obs > n_cells:
-        print(f"Subsampling to {n_cells} cells...", flush=True)
-        rng = np.random.default_rng(seed)
-        keep = rng.choice(adata.n_obs, size=n_cells, replace=False)
-        adata = adata[keep].copy()
     return adata
 
 
@@ -95,6 +108,14 @@ def prepare_common_dataset(adata: ad.AnnData) -> ad.AnnData:
 
     if "counts" not in adata.layers:
         adata.layers["counts"] = adata.X.copy()
+
+    # Derive a tumor/normal axis from the disease annotation so the dataset is
+    # ready for the biological metric's perturbational (DEG) metrics.
+    if "disease" in adata.obs.columns:
+        dis = adata.obs["disease"].astype(str)
+        adata.obs["origin"] = np.where(
+            dis.str.contains("normal", case=False), "normal", "tumor"
+        )
 
     adata.uns["dataset_id"] = "luca"
     adata.uns["dataset_name"] = "Human Lung Cancer Cell Atlas (LuCA)"
