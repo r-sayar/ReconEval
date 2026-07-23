@@ -43,7 +43,7 @@ What ReconEval evaluates
 ==============  ========================================  ===========================
 Dataset         Scope                                     Source
 ==============  ========================================  ===========================
-Tahoe-100M      1,137 drugs × 50 cell lines               Arc Institute / Vevo
+Tahoe-100M      1,137 drugs × 50 cell lines               Arc Institute
 PBMC-10M        90 cytokines × 12 donors                  Parse Bio
 LuCA            6 tissues, 4 diseases         Human Lung Cancer Atlas
 ==============  ========================================  ===========================
@@ -127,6 +127,8 @@ Data availability
 * **Reproducibility data**
   — `huggingface.co/datasets/theislab/ReconEval
   <https://huggingface.co/datasets/theislab/ReconEval>`_
+
+Update: Model weights uploaded
 
 Paper
 =====
