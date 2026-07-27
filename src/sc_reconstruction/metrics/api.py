@@ -187,7 +187,7 @@ def metric_pathway(
     Parameters
     ----------
     progeny_model
-        PROGENy weight DataFrame (from ``decoupler.get_progeny()``,
+        PROGENy weight DataFrame (from ``decoupler.op.progeny()``,
         :cite:`schubert:18,badia:22`). If ``None``, it is fetched lazily.
     pathway_dict
         Optional explicit pathway → gene list mapping. Falls back to
@@ -198,7 +198,12 @@ def metric_pathway(
     if progeny_model is None:
         try:
             import decoupler as dc
-            progeny_model = dc.get_progeny(organism="human", top=500)
+            # decoupler>=2.1 removed get_progeny() in favor of op.progeny()
+            # (same rename load_progeny() below already follows) -- the old
+            # name is gone entirely, not deprecated, so this raised
+            # AttributeError on every call and silently degraded to NaN via
+            # the except-and-warn below instead of ever actually computing.
+            progeny_model = dc.op.progeny(organism="human", top=500)
         except Exception as e:
             warnings.warn(
                 f"metric_pathway: could not fetch PROGENy via decoupler ({e}); "
